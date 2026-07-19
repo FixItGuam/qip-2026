@@ -1,45 +1,8 @@
 {
   "id": "qip-default",
   "name": "QIP Original Resources",
-  "version": "1.1.0-stage2",
+  "version": "1.0.0-stage1",
   "author": "QIP 2026",
   "base": "/skin/default",
-  "groups": [
-    "toolbar",
-    "menu",
-    "window",
-    "ui",
-    "contacts",
-    "status",
-    "xstatus",
-    "events",
-    "flags"
-  ],
-  "stage2": {
-    "statuses": [
-      "away",
-      "blocked",
-      "connecting",
-      "dnd",
-      "do_not_disturb",
-      "error",
-      "ffc",
-      "free_for_chat",
-      "invisible",
-      "na",
-      "not_available",
-      "occupied",
-      "offline",
-      "online"
-    ],
-    "xstatuses": "1-57",
-    "events": [
-      "typing",
-      "message-in",
-      "message-out",
-      "delivered",
-      "failed",
-      "info"
-    ]
-  }
+  "groups": ["toolbar", "menu", "window", "ui", "contacts", "status", "xstatus", "flags"]
 }
