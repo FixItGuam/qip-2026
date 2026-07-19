@@ -1,0 +1,15 @@
+body.skin-classic {
+  --qip-desktop-bg: #008080;
+  --qip-window-bg: #c0c0c0;
+  --qip-window-border: #000080;
+  --qip-titlebar-bg: linear-gradient(90deg,#000080,#1084d0);
+  --qip-toolbar-bg: #c0c0c0;
+  --qip-toolbar-border: #808080;
+  --qip-contact-list-bg: #fff;
+  --qip-contact-hover-bg: #000080;
+  --qip-group-color: #000;
+  --qip-radius: 0;
+  --qip-shadow: 1px 1px 0 #fff,-1px -1px 0 #808080,2px 2px 0 #000;
+}
+body.skin-classic .contact:hover,
+body.skin-classic .contact.active { color:#fff; }

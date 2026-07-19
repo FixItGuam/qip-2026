@@ -1,0 +1,23 @@
+body.skin-dark {
+  --qip-desktop-bg: linear-gradient(180deg,#111820,#202b35);
+  --qip-window-bg: #252a30;
+  --qip-window-border: #536b7c;
+  --qip-titlebar-bg: linear-gradient(180deg,#4b6376,#293b49);
+  --qip-titlebar-color: #fff;
+  --qip-toolbar-bg: #2d333a;
+  --qip-toolbar-border: #171b20;
+  --qip-contact-list-bg: #171b20;
+  --qip-contact-hover-bg: #34485a;
+  --qip-group-color: #a8c9e2;
+  --qip-input-bg: #11161b;
+  --qip-input-border: #60798a;
+  --qip-button-bg: linear-gradient(180deg,#4a5660,#2d343a);
+  --qip-button-border: #738898;
+  --qip-shadow: 0 3px 12px rgba(0,0,0,.55);
+}
+body.skin-dark,
+body.skin-dark .contact,
+body.skin-dark input,
+body.skin-dark textarea,
+body.skin-dark select,
+body.skin-dark .win-btn { color:#e8edf2; }

@@ -1,0 +1,9 @@
+body.skin-infium {
+  --qip-desktop-bg: linear-gradient(180deg,#273949,#596f80);
+  --qip-window-bg: #e9edf0;
+  --qip-window-border: #455b6b;
+  --qip-titlebar-bg: linear-gradient(180deg,#728b9e,#3d5669);
+  --qip-contact-list-bg: #f8fafb;
+  --qip-contact-hover-bg: #dceaf3;
+  --qip-group-color: #36566d;
+}

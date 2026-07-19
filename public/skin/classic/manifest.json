@@ -1,0 +1,10 @@
+{
+  "id": "classic",
+  "name": "Windows Classic",
+  "description": "Windows 9x/2000 style scaffold",
+  "version": "0.1.0",
+  "author": "QIP 2026",
+  "className": "skin-classic",
+  "stylesheet": "/skin/classic/skin.css",
+  "assetsBase": "/skin/classic"
+}

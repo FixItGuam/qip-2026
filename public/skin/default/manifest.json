@@ -1,8 +1,10 @@
 {
-  "id": "qip-default",
-  "name": "QIP Original Resources",
-  "version": "1.0.0-stage1",
+  "id": "default",
+  "name": "QIP 2026 Default",
+  "description": "Current QIP 2026 appearance",
+  "version": "2.0.0",
   "author": "QIP 2026",
-  "base": "/skin/default",
-  "groups": ["toolbar", "menu", "window", "ui", "contacts", "status", "xstatus", "flags"]
+  "className": "skin-default",
+  "stylesheet": "/skin/default/skin.css",
+  "assetsBase": "/skin/default"
 }

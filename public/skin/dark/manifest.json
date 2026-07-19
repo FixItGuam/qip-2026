@@ -1,0 +1,10 @@
+{
+  "id": "dark",
+  "name": "QIP Dark",
+  "description": "Dark skin scaffold",
+  "version": "0.1.0",
+  "author": "QIP 2026",
+  "className": "skin-dark",
+  "stylesheet": "/skin/dark/skin.css",
+  "assetsBase": "/skin/dark"
+}

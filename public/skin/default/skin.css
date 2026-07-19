@@ -1,19 +1,68 @@
-:root {
-  --qip-skin-root: "/skin/default";
+/*
+ * QIP 2026 skin contract.
+ * The default values intentionally match the current UI so installing this
+ * stage does not visually change the messenger.
+ */
+:root,
+body.skin-default {
+  --qip-font-family: Tahoma, "MS Sans Serif", sans-serif;
+  --qip-font-size: 15px;
+  --qip-desktop-bg: linear-gradient(180deg,#1b3a5c 0%,#4c6a92 40%,#325580 100%);
+  --qip-window-bg: #ece9d8;
+  --qip-window-border: #0a246a;
+  --qip-titlebar-bg: linear-gradient(to bottom,#3b5f8a 0%,#4f7eac 12%,#6b9ed0 45%,#75add9 75%,#4f79a5 100%);
+  --qip-titlebar-color: #fff;
+  --qip-toolbar-bg: #ece9d8;
+  --qip-toolbar-border: #aca899;
+  --qip-contact-list-bg: #f3f8fd;
+  --qip-contact-hover-bg: #cfe0fb;
+  --qip-group-color: #1c3f6e;
+  --qip-input-bg: #fff;
+  --qip-input-border: #7f9db9;
+  --qip-button-bg: linear-gradient(180deg,#fff,#d9e5f5);
+  --qip-button-border: #003c74;
+  --qip-radius: 4px 4px 0 0;
+  --qip-shadow: inset 1px 1px 0 #fff,inset -1px -1px 0 #7f8fa6,2px 2px 4px rgba(0,0,0,.35);
 }
-.qip-skin-icon { width:16px; height:16px; object-fit:contain; image-rendering:pixelated; display:block; }
-.qip-bottom-btn img, .qip-main-popup-menu img, .qip-tool-window .titlebar img { image-rendering:pixelated; }
-.qip-notification-glyph, .qip-popup-notification-glyph, .qip-popup-group-glyph, .qip-logout-glyph, .qip-popup-logout-glyph { font-size:0 !important; }
-.qip-notification-glyph::before, .qip-popup-notification-glyph::before {
-  content:""; display:block; width:16px; height:16px; background:url('/skin/default/toolbar/message.png') center/16px 16px no-repeat;
+
+body {
+  font-family: var(--qip-font-family);
+  font-size: var(--qip-font-size);
+  background: var(--qip-desktop-bg);
 }
-.qip-popup-group-glyph::before {
-  content:""; display:block; width:16px; height:16px; background:url('/skin/default/menu/groups.png') center/16px 16px no-repeat;
+
+.login-window,
+.qip-window,
+.chat-window {
+  background: var(--qip-window-bg);
+  border-color: var(--qip-window-border);
+  border-radius: var(--qip-radius);
+  box-shadow: var(--qip-shadow);
 }
-.qip-logout-glyph::before, .qip-popup-logout-glyph::before {
-  content:""; display:block; width:16px; height:16px; background:url('/skin/default/menu/logout.png') center/16px 16px no-repeat;
+
+.titlebar {
+  background: var(--qip-titlebar-bg);
+  color: var(--qip-titlebar-color);
 }
-.xstatus-quick-btn #bottomXStatusGlyph { font-size:0; }
-.xstatus-quick-btn #bottomXStatusGlyph::before {
-  content:""; display:block; width:16px; height:16px; background:url('/skin/default/toolbar/xstatus.png') center/16px 16px no-repeat;
+
+.toolbar {
+  background: var(--qip-toolbar-bg);
+  border-bottom-color: var(--qip-toolbar-border);
+}
+
+.contact-list { background-color: var(--qip-contact-list-bg); }
+.contact:hover,
+.contact.active { background: var(--qip-contact-hover-bg); }
+.group-header { color: var(--qip-group-color); }
+
+input,
+textarea,
+select {
+  background-color: var(--qip-input-bg);
+  border-color: var(--qip-input-border);
+}
+
+.win-btn {
+  background: var(--qip-button-bg);
+  border-color: var(--qip-button-border);
 }

@@ -1,0 +1,10 @@
+{
+  "id": "qip2005",
+  "name": "QIP 2005",
+  "description": "Classic QIP 2005 compatible skin scaffold",
+  "version": "0.1.0",
+  "author": "QIP 2026",
+  "className": "skin-qip2005",
+  "stylesheet": "/skin/qip2005/skin.css",
+  "assetsBase": "/skin/qip2005"
+}

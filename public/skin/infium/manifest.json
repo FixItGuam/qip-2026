@@ -1,0 +1,10 @@
+{
+  "id": "infium",
+  "name": "QIP Infium",
+  "description": "QIP Infium compatible skin scaffold",
+  "version": "0.1.0",
+  "author": "QIP 2026",
+  "className": "skin-infium",
+  "stylesheet": "/skin/infium/skin.css",
+  "assetsBase": "/skin/infium"
+}

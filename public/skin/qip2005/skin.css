@@ -1,0 +1,9 @@
+body.skin-qip2005 {
+  --qip-desktop-bg: linear-gradient(180deg,#1b3a5c,#4c6a92 42%,#325580);
+  --qip-window-bg: #ece9d8;
+  --qip-window-border: #0a246a;
+  --qip-titlebar-bg: linear-gradient(to bottom,#3b5f8a,#6b9ed0 45%,#4f79a5);
+  --qip-contact-list-bg: #f3f8fd;
+  --qip-contact-hover-bg: #cfe0fb;
+  --qip-group-color: #1c3f6e;
+}

@@ -648,6 +648,7 @@
 </style>
 <link rel="stylesheet" href="/theme/qip2005.css?v=46">
 <link rel="stylesheet" href="/skin/default/skin.css?v=1">
+  <link id="qip-active-skin-css" rel="stylesheet" href="/skin/default/skin.css?v=2">
 </head>
 <body>
 
@@ -5566,7 +5567,8 @@ header{display:flex;gap:10px;margin-bottom:4px}
 time{margin-left:auto;color:#888;font-size:11px}
 </style>
 </head>
-<body><main><h1>${escapeHtml(title)}</h1>${records}</main></body>
+<body><main><h1>${escapeHtml(title)}</h1>${records}</main>  <script src="/skin/skin-loader.js?v=2"></script>
+</body>
 </html>`;
 
   const blob = new Blob([exported], { type: 'text/html;charset=utf-8' });
