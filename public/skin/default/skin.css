@@ -1,0 +1,19 @@
+:root {
+  --qip-skin-root: "/skin/default";
+}
+.qip-skin-icon { width:16px; height:16px; object-fit:contain; image-rendering:pixelated; display:block; }
+.qip-bottom-btn img, .qip-main-popup-menu img, .qip-tool-window .titlebar img { image-rendering:pixelated; }
+.qip-notification-glyph, .qip-popup-notification-glyph, .qip-popup-group-glyph, .qip-logout-glyph, .qip-popup-logout-glyph { font-size:0 !important; }
+.qip-notification-glyph::before, .qip-popup-notification-glyph::before {
+  content:""; display:block; width:16px; height:16px; background:url('/skin/default/toolbar/message.png') center/16px 16px no-repeat;
+}
+.qip-popup-group-glyph::before {
+  content:""; display:block; width:16px; height:16px; background:url('/skin/default/menu/groups.png') center/16px 16px no-repeat;
+}
+.qip-logout-glyph::before, .qip-popup-logout-glyph::before {
+  content:""; display:block; width:16px; height:16px; background:url('/skin/default/menu/logout.png') center/16px 16px no-repeat;
+}
+.xstatus-quick-btn #bottomXStatusGlyph { font-size:0; }
+.xstatus-quick-btn #bottomXStatusGlyph::before {
+  content:""; display:block; width:16px; height:16px; background:url('/skin/default/toolbar/xstatus.png') center/16px 16px no-repeat;
+}

@@ -1,0 +1,8 @@
+{
+  "id": "qip-default",
+  "name": "QIP Original Resources",
+  "version": "1.0.0-stage1",
+  "author": "QIP 2026",
+  "base": "/skin/default",
+  "groups": ["toolbar", "menu", "window", "ui", "contacts", "status", "xstatus", "flags"]
+}

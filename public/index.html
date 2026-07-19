@@ -647,6 +647,7 @@
   }
 </style>
 <link rel="stylesheet" href="/theme/qip2005.css?v=46">
+<link rel="stylesheet" href="/skin/default/skin.css?v=1">
 </head>
 <body>
 
@@ -747,7 +748,7 @@
       </button>
       <span class="qip-bottom-separator"></span>
       <button type="button" class="qip-bottom-btn" onclick="openContactFinder()" title="Найти пользователя">
-        <img src="/toolbar-icons/search-xp.png?v=16" alt="">
+        <img src="/skin/default/toolbar/search.png" alt="">
       </button>
       <button type="button" class="qip-bottom-btn" onclick="openContactFinder(true)" title="Добавить контакт">
         <img src="/toolbar-icons/add-contact-xp.png?v=17" alt="">
@@ -756,17 +757,17 @@
         <span>▤</span>
       </button>
       <button type="button" class="qip-bottom-btn" onclick="openSelectedHistory()" title="История сообщений">
-        <img src="/toolbar-icons/history.png" alt="">
+        <img src="/skin/default/toolbar/history.png" alt="">
       </button>
       <span class="qip-bottom-separator"></span>
       <button type="button" class="qip-bottom-btn" onclick="openSelectedUserInfo()" title="Информация о пользователе">
-        <img src="/toolbar-icons/user_dets.png" alt="">
+        <img src="/skin/default/toolbar/user-details.png" alt="">
       </button>
       <button type="button" class="qip-bottom-btn" onclick="openProfileSettings()" title="Настройки профиля">
-        <img src="/toolbar-icons/tools.png" alt="">
+        <img src="/skin/default/toolbar/tools.png" alt="">
       </button>
       <button type="button" class="qip-bottom-btn" onclick="toggleQipSound()" title="Звуки" id="soundToggleBtn">
-        <img id="soundToggleIcon" src="/toolbar-icons/sound-on-xp.png?v=17" alt="">
+        <img id="soundToggleIcon" src="/skin/default/toolbar/sound-on.png" alt="">
       </button>
       <button type="button" class="qip-bottom-btn qip-notification-btn" onclick="openNotificationSettings()" title="Уведомления" id="notificationSettingsBtn">
         <span class="qip-notification-glyph">♟</span>
@@ -777,7 +778,7 @@
         <span class="qip-logout-glyph">↪</span>
       </button>
       <button type="button" class="qip-bottom-btn" onclick="openQipAbout()" title="О программе">
-        <img src="/toolbar-icons/info.png" alt="">
+        <img src="/skin/default/toolbar/info.png" alt="">
       </button>
     </div>
 
@@ -796,20 +797,20 @@
 
   <div class="qip-main-popup-menu" id="qipMainPopupMenu">
     <button type="button" onclick="openProfileSettings(); closeMainQipMenu()">
-      <img src="/toolbar-icons/tools.png" alt="">Настройки профиля
+      <img src="/skin/default/toolbar/tools.png" alt="">Настройки профиля
     </button>
     <button type="button" onclick="openContactFinder(); closeMainQipMenu()">
-      <img src="/toolbar-icons/search-xp.png?v=16" alt="">Найти пользователя
+      <img src="/skin/default/toolbar/search.png" alt="">Найти пользователя
     </button>
     <button type="button" onclick="openGroupManager(); closeMainQipMenu()">
       <span class="qip-popup-group-glyph">▤</span>Группы контактов
     </button>
     <button type="button" onclick="openSelectedHistory(); closeMainQipMenu()">
-      <img src="/toolbar-icons/history.png" alt="">История сообщений
+      <img src="/skin/default/toolbar/history.png" alt="">История сообщений
     </button>
     <span class="qip-menu-separator"></span>
     <button type="button" onclick="toggleQipSound(); closeMainQipMenu()">
-      <img id="menuSoundIcon" src="/toolbar-icons/sound-on-xp.png?v=17" alt="">Включить/выключить звуки
+      <img id="menuSoundIcon" src="/skin/default/toolbar/sound-on.png" alt="">Включить/выключить звуки
     </button>
     <button type="button" onclick="openNotificationSettings(); closeMainQipMenu()">
       <span class="qip-popup-notification-glyph">♟</span>Настройки уведомлений
@@ -819,7 +820,7 @@
       <span class="qip-popup-logout-glyph">↪</span>Выйти из профиля
     </button>
     <button type="button" onclick="openQipAbout(); closeMainQipMenu()">
-      <img src="/toolbar-icons/info.png" alt="">О программе
+      <img src="/skin/default/toolbar/info.png" alt="">О программе
     </button>
   </div>
 
@@ -943,7 +944,7 @@
 <div class="qip-tool-overlay" id="contactFinderOverlay">
   <div class="qip-tool-window contact-finder-window">
     <div class="titlebar">
-      <div class="tleft"><img src="/toolbar-icons/search-xp.png?v=16" alt=""><span>Поиск пользователей</span></div>
+      <div class="tleft"><img src="/skin/default/toolbar/search.png" alt=""><span>Поиск пользователей</span></div>
       <div class="winbtns"><div class="winbtn-close-xp" onclick="closeContactFinder()">✕</div></div>
     </div>
     <div class="qip-tool-content">
@@ -964,7 +965,7 @@
 <div class="qip-tool-overlay" id="userInfoOverlay">
   <div class="qip-tool-window user-info-window">
     <div class="titlebar">
-      <div class="tleft"><img src="/toolbar-icons/user_dets.png" alt=""><span>Информация о пользователе</span></div>
+      <div class="tleft"><img src="/skin/default/toolbar/user-details.png" alt=""><span>Информация о пользователе</span></div>
       <div class="winbtns"><div class="winbtn-close-xp" onclick="closeSelectedUserInfo()">✕</div></div>
     </div>
     <div class="user-info-sheet">
@@ -1043,9 +1044,9 @@
       <div class="tb-icon transfer-toolbar-icon" onclick="openTransferManager()" title="Передачи файлов">
         <span>⇅</span><b id="transferToolbarBadge"></b>
       </div>
-      <div class="tb-icon" onclick="toggleHistorySearch()" title="Поиск в текущем окне (Ctrl+F)"><img src="/toolbar-icons/search-xp.png?v=16" alt="" width="16" height="16" style="image-rendering:pixelated;"></div>
+      <div class="tb-icon" onclick="toggleHistorySearch()" title="Поиск в текущем окне (Ctrl+F)"><img src="/skin/default/toolbar/search.png" alt="" width="16" height="16" style="image-rendering:pixelated;"></div>
       <div class="tb-icon history-window-icon" onclick="openHistoryWindow()" title="История сообщений"><span class="history-book-glyph">H</span></div>
-      <div class="tb-icon" onclick="openCurrentPeerInfo()" title="Информация о собеседнике"><img src="/toolbar-icons/user_dets.png" alt="" style="image-rendering:pixelated;width:16px;height:16px;"></div>
+      <div class="tb-icon" onclick="openCurrentPeerInfo()" title="Информация о собеседнике"><img src="/skin/default/toolbar/user-details.png" alt="" style="image-rendering:pixelated;width:16px;height:16px;"></div>
       <div class="tb-icon" onclick="quoteLastMessage()" title="Цитировать последнее сообщение"><img src="/toolbar-icons/quote.png" alt="" style="image-rendering:pixelated;width:16px;height:16px;"></div>
     </div>
     <div class="history-search-bar" id="historySearchBar">
