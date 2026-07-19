@@ -423,8 +423,9 @@
   .peer-xstatus-inline { flex:1 1 0; min-width:0; display:flex; align-items:center; gap:4px; overflow:hidden; color:#725f24; }
   .peer-xstatus-inline.empty { display:none; }
   .peer-xstatus-icon-wrap { flex:0 0 16px; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
-  .peer-presence-line { min-height:17px; display:flex; align-items:center; gap:4px; color:#666; }
-  .peer-country-online { display:inline-flex; align-items:center; gap:5px; min-width:0; }
+  .peer-presence-line { min-height:17px; display:flex; align-items:center; gap:7px; min-width:0; color:#666; overflow:hidden; }
+  .peer-country-online { display:inline-flex; align-items:center; gap:5px; min-width:0; overflow:hidden; }
+  .peer-country-online.is-offline { opacity:.68; }
   .peer-country-flag-img { width:20px; height:15px; flex:0 0 20px; object-fit:cover; border:1px solid rgba(0,0,0,.2); image-rendering:auto; }
   .peer-country-flag-fallback { font-size:16px; line-height:15px; flex:0 0 auto; }
   .peer-country-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -2841,21 +2842,30 @@ function countryDisplayName(user){
   return code;
 }
 
-function renderPeerPresence(user, status){
+function renderPeerPresence(user, status, isTyping = false){
   const el = document.getElementById('chatPeerStatus');
-  if(!el) return;
-  if(status === 'online' && user.online){
-    const code = String(user.country_code || '').trim().toUpperCase();
-    const flatFlagUrl = countryCodeToFlatFlagUrl(code);
-    const emojiFlag = countryCodeToFlag(code);
-    const countryName = countryDisplayName(user);
-    const flagHtml = flatFlagUrl
-      ? `<img class="peer-country-flag-img" src="${flatFlagUrl}" alt="${escapeHtml(emojiFlag)}" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'peer-country-flag-fallback',textContent:'${escapeHtml(emojiFlag)}'}))">`
-      : `<span class="peer-country-flag-fallback">${escapeHtml(emojiFlag)}</span>`;
-    el.innerHTML = `<span class="peer-country-online" title="Пользователь сейчас в сети">${flagHtml}<span class="peer-country-name">${escapeHtml(countryName)}</span></span>`;
-    return;
-  }
-  el.textContent = (STATUS_LABELS[status] || status || 'Offline').replace(/^./, c => c.toUpperCase());
+  if(!el || !user) return;
+
+  const code = String(user.country_code || '').trim().toUpperCase();
+  const flatFlagUrl = countryCodeToFlatFlagUrl(code);
+  const emojiFlag = countryCodeToFlag(code);
+  const countryName = countryDisplayName(user);
+
+  const flagHtml = flatFlagUrl
+    ? `<img class="peer-country-flag-img" src="${flatFlagUrl}" alt="${escapeHtml(emojiFlag)}" width="20" height="15" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'peer-country-flag-fallback',textContent:'${escapeHtml(emojiFlag)}'}))">`
+    : `<span class="peer-country-flag-fallback">${escapeHtml(emojiFlag)}</span>`;
+
+  const statusLabel = (STATUS_LABELS[status] || status || 'Offline')
+    .replace(/^./, char => char.toUpperCase());
+
+  el.innerHTML = `
+    <span class="peer-country-online${user.online ? '' : ' is-offline'}"
+          title="${escapeHtml(statusLabel)}">
+      ${flagHtml}
+      <span class="peer-country-name">${escapeHtml(countryName)}</span>
+    </span>
+    ${isTyping ? '<span class="typing-indicator">печатает...</span>' : ''}
+  `;
 }
 
 function refreshPeerXStatusMarquee(){
@@ -2967,7 +2977,7 @@ function switchTab(pid){
   clearTypingIndicator();
   document.getElementById('historySearchBar').classList.remove('open');
   document.getElementById('historySearchInput').value = '';
-  document.getElementById('chatTitle').textContent = peer.nickname;
+  document.getElementById('chatTitle').textContent = contactDisplayName(peer);
   applyPeerStatusUI(peer);
   renderChatTabs();
   loadContacts();
@@ -3095,14 +3105,22 @@ function handleTyping(){
 let remoteTypingTimeout = null;
 let isShowingTyping = false;
 function showTypingIndicator(isTyping){
-  const el = document.getElementById('chatPeerStatus');
   clearTimeout(remoteTypingTimeout);
   isShowingTyping = isTyping;
+
+  if(!currentPeer) return;
+
+  const status = currentPeer.status || (currentPeer.online ? 'online' : 'offline');
+  renderPeerPresence(currentPeer, status, isTyping);
+
   if(isTyping){
-    el.innerHTML = '<span class="typing-indicator">печатает...</span>';
-    remoteTypingTimeout = setTimeout(() => { isShowingTyping = false; if(currentPeer) renderPeerPresence(currentPeer, currentPeer.status || (currentPeer.online ? 'online' : 'offline')); }, 4000);
-  } else {
-    if(currentPeer) renderPeerPresence(currentPeer, currentPeer.status || (currentPeer.online ? 'online' : 'offline'));
+    remoteTypingTimeout = setTimeout(() => {
+      isShowingTyping = false;
+      if(currentPeer){
+        const currentStatus = currentPeer.status || (currentPeer.online ? 'online' : 'offline');
+        renderPeerPresence(currentPeer, currentStatus, false);
+      }
+    }, 4000);
   }
 }
 
