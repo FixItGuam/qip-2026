@@ -1,0 +1,4 @@
+
+/* QIP default skin — Stage 2 */
+.status-ico, .xstatus-ico-list, .xstatus-corner img, .tab-xstatus-corner img, #myStatusIcon { image-rendering: pixelated; }
+.qip-event-icon { width:16px; height:16px; object-fit:contain; image-rendering:pixelated; }

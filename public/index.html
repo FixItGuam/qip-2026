@@ -392,29 +392,29 @@
     content:''; position:absolute; right:0; bottom:0; width:14px; height:14px;
     background-size:contain; background-repeat:no-repeat; background-position:center;
   }
-  .qip-logo-lg.st-online::after { background-image:url(/status-icons/online.png); }
-  .qip-logo-lg.st-away::after { background-image:url(/status-icons/away.png); }
-  .qip-logo-lg.st-busy::after { background-image:url(/status-icons/busy.png); }
-  .qip-logo-lg.st-invisible::after { background-image:url(/status-icons/invisible.png); }
-  .qip-logo-lg.st-offline::after { background-image:url(/status-icons/offline.png); }
-  .qip-logo-lg.st-ffc::after { background-image:url(/status-icons/ffc.png); }
-  .qip-logo-lg.st-na::after { background-image:url(/status-icons/na.png); }
-  .qip-logo-lg.st-occupied::after { background-image:url(/status-icons/occupied.png); }
-  .qip-logo-lg.st-lunch::after { background-image:url(/status-icons/lunch.png); }
+  .qip-logo-lg.st-online::after { background-image:url(/skin/default/status/online.png); }
+  .qip-logo-lg.st-away::after { background-image:url(/skin/default/status/away.png); }
+  .qip-logo-lg.st-busy::after { background-image:url(/skin/default/status/busy.png); }
+  .qip-logo-lg.st-invisible::after { background-image:url(/skin/default/status/invisible.png); }
+  .qip-logo-lg.st-offline::after { background-image:url(/skin/default/status/offline.png); }
+  .qip-logo-lg.st-ffc::after { background-image:url(/skin/default/status/ffc.png); }
+  .qip-logo-lg.st-na::after { background-image:url(/skin/default/status/na.png); }
+  .qip-logo-lg.st-occupied::after { background-image:url(/skin/default/status/occupied.png); }
+  .qip-logo-lg.st-lunch::after { background-image:url(/skin/default/status/lunch.png); }
 
   .tab-status-dot {
     width:16px; height:16px; flex-shrink:0; background-size:contain; background-repeat:no-repeat; background-position:center;
     image-rendering:pixelated;
   }
-  .tab-status-dot.st-online { background-image:url(/status-icons/online.png); }
-  .tab-status-dot.st-away { background-image:url(/status-icons/away.png); }
-  .tab-status-dot.st-busy { background-image:url(/status-icons/busy.png); }
-  .tab-status-dot.st-invisible { background-image:url(/status-icons/invisible.png); }
-  .tab-status-dot.st-offline { background-image:url(/status-icons/offline.png); }
-  .tab-status-dot.st-ffc { background-image:url(/status-icons/ffc.png); }
-  .tab-status-dot.st-na { background-image:url(/status-icons/na.png); }
-  .tab-status-dot.st-occupied { background-image:url(/status-icons/occupied.png); }
-  .tab-status-dot.st-lunch { background-image:url(/status-icons/lunch.png); }
+  .tab-status-dot.st-online { background-image:url(/skin/default/status/online.png); }
+  .tab-status-dot.st-away { background-image:url(/skin/default/status/away.png); }
+  .tab-status-dot.st-busy { background-image:url(/skin/default/status/busy.png); }
+  .tab-status-dot.st-invisible { background-image:url(/skin/default/status/invisible.png); }
+  .tab-status-dot.st-offline { background-image:url(/skin/default/status/offline.png); }
+  .tab-status-dot.st-ffc { background-image:url(/skin/default/status/ffc.png); }
+  .tab-status-dot.st-na { background-image:url(/skin/default/status/na.png); }
+  .tab-status-dot.st-occupied { background-image:url(/skin/default/status/occupied.png); }
+  .tab-status-dot.st-lunch { background-image:url(/skin/default/status/lunch.png); }
 
   .tab-status-wrap {
     position:relative;
@@ -647,7 +647,8 @@
   }
 </style>
 <link rel="stylesheet" href="/theme/qip2005.css?v=46">
-<link rel="stylesheet" href="/skin/default/skin.css?v=1">
+<link rel="stylesheet" href="/skin/default/skin.css?v=2">
+<link rel="stylesheet" href="/skin/default/stage2.css?v=2">
 </head>
 <body>
 
@@ -655,7 +656,7 @@
   <div class="qip-auth-window">
     <div class="titlebar qip-auth-titlebar">
       <div class="tleft">
-        <img src="/status-icons/online.png" alt="" style="width:16px;height:16px;image-rendering:pixelated;">
+        <img src="/skin/default/status/online.png" alt="" style="width:16px;height:16px;image-rendering:pixelated;">
         <span>QIP 2026 — Accounts manager</span>
       </div>
       <div class="winbtns">
@@ -784,7 +785,7 @@
 
     <div class="qip-bottom-status-row">
       <button type="button" class="status-btn" id="statusBtn" onclick="toggleStatusMenu()">
-        <img id="myStatusIcon" class="dot" src="/status-icons/online.png" alt="">
+        <img id="myStatusIcon" class="dot" src="/skin/default/status/online.png" alt="">
         <span id="myXStatusIcon" style="display:none;"></span>
         <span id="myStatus">Online</span>
         <span class="status-drop-arrow">▼</span>
@@ -1063,7 +1064,7 @@
         <div class="my-nick" id="myNameChat"></div>
         <div class="info-row-combined">
           <span class="info-row" onclick="toggleStatusMenu()">
-            <img id="myStatusIconChat" class="dot" src="/status-icons/online.png" alt=""><span id="myStatusTextChat">Online</span>
+            <img id="myStatusIconChat" class="dot" src="/skin/default/status/online.png" alt=""><span id="myStatusTextChat">Online</span>
           </span>
           <span class="info-row" onclick="toggleXStatusPicker()">
             <span id="myXStatusIconChat" style="display:none;"></span><span id="myXStatusPlaceholder" class="placeholder">X-stat</span>
@@ -1275,7 +1276,7 @@
 
     <div class="profile-settings-links">
       <button type="button" class="profile-link-button" onclick="closeProfileSettings();toggleStatusMenu();">
-        <img id="profileStatusIcon" class="dot" src="/status-icons/online.png" alt="">
+        <img id="profileStatusIcon" class="dot" src="/skin/default/status/online.png" alt="">
         <span>Статус: <b id="profileStatusText">Online</b></span>
       </button>
       <button type="button" class="profile-link-button" onclick="closeProfileSettings();toggleXStatusPicker();">
@@ -1300,14 +1301,14 @@
       <div class="winbtns"><div class="winbtn" onclick="closeStatusMenu()">×</div></div>
     </div>
     <div class="status-menu">
-      <div class="status-menu-item" onclick="setMyStatus('online')"><img class="dot" src="/status-icons/online.png" alt="">Online</div>
-      <div class="status-menu-item" onclick="setMyStatus('ffc')"><img class="dot" src="/status-icons/ffc.png" alt="">Готов общаться</div>
-      <div class="status-menu-item" onclick="setMyStatus('away')"><img class="dot" src="/status-icons/away.png" alt="">Отошёл</div>
-      <div class="status-menu-item" onclick="setMyStatus('lunch')"><img class="dot" src="/status-icons/lunch.png" alt="">Обедаю</div>
-      <div class="status-menu-item" onclick="setMyStatus('na')"><img class="dot" src="/status-icons/na.png" alt="">Недоступен</div>
-      <div class="status-menu-item" onclick="setMyStatus('occupied')"><img class="dot" src="/status-icons/occupied.png" alt="">Занят делами</div>
-      <div class="status-menu-item" onclick="setMyStatus('busy')"><img class="dot" src="/status-icons/busy.png" alt="">Не беспокоить</div>
-      <div class="status-menu-item" onclick="setMyStatus('invisible')"><img class="dot" src="/status-icons/invisible.png" alt="">Невидимка</div>
+      <div class="status-menu-item" onclick="setMyStatus('online')"><img class="dot" src="/skin/default/status/online.png" alt="">Online</div>
+      <div class="status-menu-item" onclick="setMyStatus('ffc')"><img class="dot" src="/skin/default/status/ffc.png" alt="">Готов общаться</div>
+      <div class="status-menu-item" onclick="setMyStatus('away')"><img class="dot" src="/skin/default/status/away.png" alt="">Отошёл</div>
+      <div class="status-menu-item" onclick="setMyStatus('lunch')"><img class="dot" src="/skin/default/status/lunch.png" alt="">Обедаю</div>
+      <div class="status-menu-item" onclick="setMyStatus('na')"><img class="dot" src="/skin/default/status/na.png" alt="">Недоступен</div>
+      <div class="status-menu-item" onclick="setMyStatus('occupied')"><img class="dot" src="/skin/default/status/occupied.png" alt="">Занят делами</div>
+      <div class="status-menu-item" onclick="setMyStatus('busy')"><img class="dot" src="/skin/default/status/busy.png" alt="">Не беспокоить</div>
+      <div class="status-menu-item" onclick="setMyStatus('invisible')"><img class="dot" src="/skin/default/status/invisible.png" alt="">Невидимка</div>
     </div>
   </div>
 </div>
@@ -1869,14 +1870,14 @@ function updateMyStatusDisplay(){
   btn.classList.remove(...ALL_STATUSES.map(s => 'st-' + s));
 
   const statusData = {
-    away:      { label: 'Отошёл',          src: '/status-icons/away.png' },
-    busy:      { label: 'Не беспокоить',   src: '/status-icons/busy.png' },
-    invisible: { label: 'Невидимка',       src: '/status-icons/invisible.png' },
-    ffc:       { label: 'Готов общаться',  src: '/status-icons/ffc.png' },
-    na:        { label: 'Недоступен',      src: '/status-icons/na.png' },
-    occupied:  { label: 'Занят делами',    src: '/status-icons/occupied.png' },
-    lunch:     { label: 'Обедаю',          src: '/status-icons/lunch.png' },
-    online:    { label: 'Online',          src: '/status-icons/online.png' }
+    away:      { label: 'Отошёл',          src: '/skin/default/status/away.png' },
+    busy:      { label: 'Не беспокоить',   src: '/skin/default/status/busy.png' },
+    invisible: { label: 'Невидимка',       src: '/skin/default/status/invisible.png' },
+    ffc:       { label: 'Готов общаться',  src: '/skin/default/status/ffc.png' },
+    na:        { label: 'Недоступен',      src: '/skin/default/status/na.png' },
+    occupied:  { label: 'Занят делами',    src: '/skin/default/status/occupied.png' },
+    lunch:     { label: 'Обедаю',          src: '/skin/default/status/lunch.png' },
+    online:    { label: 'Online',          src: '/skin/default/status/online.png' }
   };
   const st = statusData[myStatus] || statusData.online;
   if(ALL_STATUSES.includes(myStatus)){
@@ -1933,7 +1934,7 @@ function toggleXStatusPicker(){
     const picker = document.getElementById('xstatusPicker');
     let html = '';
     XSTATUS_LIST.forEach(s => {
-      html += `<img src="/status-icons/xstatus/${s.id}.png" title="${escapeHtml(s.label)}" onclick="openCaptionPrompt('${s.id}')" alt="">`;
+      html += `<img src="/skin/default/status/xstatus/${s.id}.png" title="${escapeHtml(s.label)}" onclick="openCaptionPrompt('${s.id}')" alt="">`;
     });
     html += `<div class="xstatus-clear" onclick="setMyXStatus(null)">Убрать</div>`;
     picker.innerHTML = html;
@@ -1950,7 +1951,7 @@ let pendingXStatusIcon = null;
 
 function openCaptionPrompt(id){
   pendingXStatusIcon = id;
-  document.getElementById('xstatusCaptionIcon').src = `/status-icons/xstatus/${id}.png`;
+  document.getElementById('xstatusCaptionIcon').src = `/skin/default/status/xstatus/${id}.png`;
   document.getElementById('xstatusCaptionInput').value = '';
   document.getElementById('xstatusOverlay').classList.remove('open');
   document.getElementById('xstatusCaptionOverlay').classList.add('open');
@@ -1988,9 +1989,9 @@ function renderXStatusBadge(xstatus){
   }
   if(xstatus.includes('|')){
     const [iconId, word] = xstatus.split('|');
-    return `<span class="xstatus-combo"><img class="dot" src="/status-icons/xstatus/${escapeHtml(iconId)}.png" alt=""><span class="xstatus-custom-badge">${escapeHtml(word)}</span></span>`;
+    return `<span class="xstatus-combo"><img class="dot" src="/skin/default/status/xstatus/${escapeHtml(iconId)}.png" alt=""><span class="xstatus-custom-badge">${escapeHtml(word)}</span></span>`;
   }
-  return `<img class="dot" src="/status-icons/xstatus/${xstatus}.png" alt="">`;
+  return `<img class="dot" src="/skin/default/status/xstatus/${xstatus}.png" alt="">`;
 }
 
 function getXStatusCaption(xstatus){
@@ -2003,7 +2004,7 @@ function getXStatusCaption(xstatus){
 function renderXStatusIconOnly(xstatus){
   if(!xstatus || xstatus.startsWith('custom:')) return '';
   const iconId = xstatus.includes('|') ? xstatus.split('|')[0] : xstatus;
-  return `<img class="dot" src="/status-icons/xstatus/${escapeHtml(iconId)}.png" alt="">`;
+  return `<img class="dot" src="/skin/default/status/xstatus/${escapeHtml(iconId)}.png" alt="">`;
 }
 
 function refreshXStatusMarquees(root = document){
@@ -2188,7 +2189,7 @@ function showSystemNotification(peer, body){
     const notification = new Notification(contactDisplayName(peer) || peer.nickname || 'QIP 2026', {
       body: notificationMessageText(body),
       icon: resolveAvatarUrl(peer.avatar_emoji),
-      badge: '/status-icons/online.png',
+      badge: '/skin/default/status/online.png',
       tag: `qip-message-${peer.id}`,
       renotify: true,
       silent: true
@@ -2822,7 +2823,7 @@ function renderGroup(key, title, users){
 
     div.innerHTML = `
       <span class="status-ico-wrap">
-        <img class="status-ico" src="/status-icons/${st}.png" alt="" title="${STATUS_LABELS[st]}">
+        <img class="status-ico" src="/skin/default/status/${st}.png" alt="" title="${STATUS_LABELS[st]}">
         <span class="xstatus-corner">${xicon}</span>
       </span>
       <span class="contact-main-line">
@@ -4789,7 +4790,7 @@ function openProfileSettings(){
     away: 'Отошёл', busy: 'Не беспокоить', invisible: 'Невидимка', ffc: 'Готов общаться',
     na: 'Недоступен', occupied: 'Занят делами', lunch: 'Обедаю', online: 'Online'
   };
-  document.getElementById('profileStatusIcon').src = `/status-icons/${myStatus || 'online'}.png`;
+  document.getElementById('profileStatusIcon').src = `/skin/default/status/${myStatus || 'online'}.png`;
   document.getElementById('profileStatusText').textContent = statusData[myStatus] || 'Online';
 
   const xIconEl = document.getElementById('profileXStatusIcon');
@@ -5202,7 +5203,7 @@ function renderContactFinderResults(){
     row.type = 'button';
     row.className = 'contact-finder-row';
     row.innerHTML = `
-      <img src="/status-icons/${st}.png" alt="">
+      <img src="/skin/default/status/${st}.png" alt="">
       <span class="contact-finder-name">${escapeHtml(user.nickname)}</span>
       <span class="contact-finder-id">${escapeHtml(user.qip_number || String(user.id))}</span>
       <span class="contact-finder-state">${escapeHtml(STATUS_LABELS[st] || st)}</span>
