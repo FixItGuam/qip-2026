@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>QIP 2026</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html, body { height: 100%; }
+  body {
+    font-family: Tahoma, "MS Sans Serif", sans-serif;
+    font-size: 15px;
+    background: linear-gradient(180deg,#1b3a5c 0%,#4c6a92 40%,#325580 100%);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 12px;
+  }
+
+  .titlebar {
+    height: 24px; background: linear-gradient(180deg,#4a8fe0 0%,#2f6fc2 15%,#1c4bb0 45%,#0f3a9e 70%,#0c2f7f 100%);
+    display:flex; align-items:center; justify-content:space-between; padding:0 4px;
+    color:#fff; font-weight:bold; font-size:14px; text-shadow:1px 1px 1px rgba(0,0,0,0.4);
+  }
+  .titlebar .tleft { display:flex; align-items:center; gap:5px; }
+  .titlebar .qip-logo {
+    width:16px; height:16px; flex-shrink:0; position:relative;
+  }
+  .titlebar .qip-logo::before {
+    content:'❀'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:14px; color:#7ed13a; text-shadow: 0 1px 0 #2f6b12, 1px 0 0 #2f6b12, -1px 0 0 #2f6b12, 0 -1px 0 #2f6b12;
+  }
+  .qip-logo.has-avatar::before { content: none; }
+  .qip-logo.has-avatar img, .qip-logo-sm.has-avatar img { width:100%; height:100%; image-rendering:pixelated; border-radius:2px; object-fit:cover; }
+  .titlebar .winbtns { display:flex; gap:2px; }
+  .titlebar .winbtn {
+    width:16px; height:14px; background: linear-gradient(180deg,#f5f5f5,#c8c8c8);
+    border:1px solid #14336e; border-radius:1px; font-size:8px; color:#111;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* в окне чата кнопки закрыть/свернуть теперь на строке вкладок - крупные, для пальца */
+  .chat-tab-row-wrap { display:flex; align-items:stretch; background:#f7f5ee; }
+  .chat-window-controls { display:flex; gap:2px; flex-shrink:0; align-items:center; padding:4px 4px 0; }
+  .chat-window-controls .winbtn {
+    width:34px; height:30px; font-size:18px; font-weight:bold; border-radius:3px;
+    background: linear-gradient(180deg,#f5f5f5,#c8c8c8); border:1px solid #14336e; color:#111;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chat-window-controls .winbtn:last-child {
+    background: linear-gradient(180deg,#ff8f80,#e04030); color:#fff; border-color:#a02010;
+  }
+
+  /* --- LOGIN --- */
+  .login-window { width: 300px; background:#ece9d8; border:1px solid #0a246a; border-radius:5px; box-shadow:3px 3px 12px rgba(0,0,0,0.5); overflow:hidden; }
+  .login-body { padding: 12px; }
+  .login-groupbox { border:1px solid #9aa; border-radius:3px; padding:10px; background:#f4f2ea; margin-bottom:10px; }
+  .login-groupbox .gb-title { color:#1c4bb0; font-weight:bold; font-size:15px; margin-bottom:8px; }
+  .login-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+  .login-row label { width:78px; font-size:14px; color:#333; text-align:right; flex-shrink:0; }
+  .login-row input[type=text] {
+    flex:1; padding:6px; font-size:15px; border:1px solid #7f9db9; border-radius:2px;
+  }
+  .login-actions { display:flex; flex-direction:column; gap:3px; margin-top:2px; }
+  .win-btn {
+    padding:6px 8px; font-size:14px; border:1px solid #14336e; border-radius:2px;
+    background: linear-gradient(180deg,#f5f9ff,#c7d8f2); cursor:pointer; text-align:center;
+  }
+  .win-btn.primary { font-weight:bold; }
+  .win-btn.disabled { opacity:0.45; cursor:default; }
+  .login-flex { display:flex; gap:10px; }
+  .login-flex .left { flex:1; }
+  .login-flex .right { display:flex; flex-direction:column; gap:4px; width:110px; }
+  .login-error { color:#a01414; font-size:14px; margin-bottom:6px; min-height:14px; }
+  .login-footer { border:1px solid #9aa; border-radius:3px; padding:6px 10px; background:#f4f2ea; display:flex; align-items:center; justify-content:space-between; font-size:14px; color:#1c4bb0; font-weight:bold; }
+
+  /* --- MAIN WINDOW --- */
+  .qip-window { width: 260px; background:#ece9d8; border:1px solid #0a246a; border-radius:5px 5px 3px 3px; box-shadow: 3px 3px 12px rgba(0,0,0,0.5); overflow:hidden; display:none; flex-direction:column; }
+  .toolbar { display:flex; gap:2px; padding:3px 4px; background: linear-gradient(180deg,#f4f2ea,#d9d6c8); border-bottom:1px solid #a8a8a8; }
+  .tb-icon {
+    width:20px; height:18px; border-radius:2px; border:1px solid transparent;
+    display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; cursor:default;
+  }
+  .tb-icon:hover { border-color:#7f9db9; background:#e5edfb; }
+  .tb-clover { color:#3f9e2e; }
+  .tb-g { background:#ffd23f; color:#7a4a00; border:1px solid #c99a1e; }
+  .tb-h { background:#ffd23f; color:#7a4a00; border:1px solid #c99a1e; }
+
+  .contact-list { flex:1; min-height:0; overflow-y:auto; background: linear-gradient(180deg,#eef4fc,#d3e2f4); }
+  .minimized-chats-bar {
+    display:none; align-items:center; justify-content:space-between; gap:6px;
+    padding:6px 8px; background: linear-gradient(180deg,#fff6d9,#f5e2a0); border-bottom:1px solid #c9a227;
+    font-size:14px; font-weight:bold; color:#6b4f10; cursor:pointer;
+  }
+  .minimized-chats-bar.show { display:flex; }
+  .group-header {
+    display:flex; align-items:center; gap:4px; padding:3px 6px; cursor:pointer;
+    background: linear-gradient(180deg,#dbe6f5,#b9cbe6); border-top:1px solid #fff; border-bottom:1px solid #96acc9;
+    font-weight:bold; color:#1c3f6e; font-size:14px; user-select:none;
+  }
+  .group-header .arrow { font-size:9px; transition: transform 0.15s; display:inline-block; }
+  .group-header.collapsed .arrow { transform: rotate(-90deg); }
+  .group-body.collapsed { display:none; }
+
+  .contact { display:flex; align-items:center; gap:8px; padding:7px 10px; cursor:pointer; }
+  .contact:hover, .contact.active { background:#c8daf5; }
+  .avatar {
+    width:26px; height:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-size:16px; position:relative;
+  }
+  .avatar img { width:26px; height:26px; image-rendering: pixelated; border-radius:2px; object-fit:cover; }
+  .avatar.is-online::after, .avatar.is-away::after, .avatar.is-busy::after, .avatar.is-invisible::after, .avatar.is-offline::after,
+  .avatar.is-ffc::after, .avatar.is-na::after, .avatar.is-occupied::after, .avatar.is-lunch::after {
+    content:''; position:absolute; right:-4px; bottom:-4px; width:14px; height:14px;
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+  }
+  .avatar.is-online::after { background-image:url(/status-icons/online.png); }
+  .avatar.is-away::after { background-image:url(/status-icons/away.png); }
+  .avatar.is-busy::after { background-image:url(/status-icons/busy.png); }
+  .avatar.is-invisible::after { background-image:url(/status-icons/invisible.png); }
+  .avatar.is-offline::after { background-image:url(/status-icons/offline.png); }
+  .avatar.is-ffc::after { background-image:url(/status-icons/ffc.png); }
+  .avatar.is-na::after { background-image:url(/status-icons/na.png); }
+  .avatar.is-occupied::after { background-image:url(/status-icons/occupied.png); }
+  .avatar.is-lunch::after { background-image:url(/status-icons/lunch.png); }
+  .cname.online { color:#2b2b7a; font-weight:600; }
+  .cname.away { color:#a3701a; font-weight:600; }
+  .cname.busy { color:#a3271a; font-weight:600; }
+  .cname.invisible { color:#7a7a9a; font-weight:600; }
+  .cname.offline { color:#9a9a9a; }
+  .cname.ffc { color:#1a7a3a; font-weight:600; }
+  .cname.na { color:#8a8a8a; font-weight:600; }
+  .cname.occupied { color:#a3271a; font-weight:600; }
+  .cname.lunch { color:#a3701a; font-weight:600; }
+  .cstatus { color:#8a8a8a; font-size:12px; margin-left:auto; }
+  .unread-badge {
+    background:#c0392b; color:#fff; font-size:12px; font-weight:bold; border-radius:8px;
+    padding:1px 6px; margin-left:6px; min-width:14px; text-align:center;
+  }
+
+  .bottombar { padding:4px; background: linear-gradient(180deg,#f4f2ea,#d9d6c8); border-top:1px solid #a8a8a8; position:relative; }
+
+  .xstatus-overlay {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.35); z-index:55; padding:14px;
+  }
+  .xstatus-overlay.open { display:flex; }
+  .xstatus-box {
+    width:min(360px, 92vw); max-height:80vh; background:#ece9d8; border:1px solid #0a246a;
+    border-radius:5px; box-shadow:3px 3px 12px rgba(0,0,0,0.5); overflow:hidden; display:flex; flex-direction:column;
+  }
+  .xstatus-picker {
+    display:grid; grid-template-columns: repeat(auto-fill, 34px); justify-content:center; gap:5px;
+    background:#fff; padding:10px; overflow-y:auto;
+  }
+  .xstatus-picker img { width:28px; height:28px; cursor:pointer; padding:2px; border-radius:3px; image-rendering:pixelated; }
+  .xstatus-picker img:hover { background:#e5edfb; }
+  .xstatus-clear { grid-column: 1 / -1; text-align:center; font-size:13px; padding:8px; cursor:pointer; color:#a01414; border-top:1px solid #eee; margin-top:3px; }
+  .xstatus-custom-row { display:flex; gap:6px; padding:8px 10px; background:#f4f2ea; border-bottom:1px solid #c8c8c8; }
+  .xstatus-custom-row input { flex:1; padding:6px; font-size:14px; border:1px solid #7f9db9; border-radius:2px; }
+  .xstatus-custom-btn {
+    padding:6px 14px; font-size:14px; font-weight:bold; border:1px solid #14336e; border-radius:2px;
+    background: linear-gradient(180deg,#eaffea,#c7f0c7); cursor:pointer;
+  }
+  .xstatus-custom-badge {
+    background:#fff3cd; border:1px solid #c9a227; padding:1px 7px; border-radius:9px;
+    font-size:11px; color:#6b4f10; font-weight:bold; white-space:nowrap;
+  }
+  .xstatus-quick-btn {
+    width:32px; height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    border:1px solid #14336e; border-radius:2px; background: linear-gradient(180deg,#f5f9ff,#c7d8f2); cursor:pointer; font-size:18px;
+  }
+  .bottombar-row { display:flex; gap:3px; margin-bottom:3px; }
+  .bb-btn {
+    flex:1; padding:3px; font-size:10px; text-align:center; border:1px solid #14336e; border-radius:2px;
+    background: linear-gradient(180deg,#f5f9ff,#c7d8f2);
+  }
+  .bb-icon { width:24px; flex:none; }
+  .status-btn {
+    width:100%; padding:6px; font-size:14px; font-weight:bold; text-align:center;
+    border:1px solid #14336e; border-radius:2px; color:#2b6b1f; cursor:pointer;
+    background: linear-gradient(180deg,#eaffea,#c7f0c7); display:flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .status-btn.st-away { color:#8a5f10; background: linear-gradient(180deg,#fff6e0,#f0dfa8); }
+  .status-btn.st-busy { color:#8a2010; background: linear-gradient(180deg,#ffe8e0,#f0b0a8); }
+  .status-btn.st-invisible { color:#555; background: linear-gradient(180deg,#eee,#ccc); }
+  .status-btn.st-ffc { color:#1a6b2f; background: linear-gradient(180deg,#eaffea,#c7f0c7); }
+  .status-btn.st-na { color:#666; background: linear-gradient(180deg,#f0f0f0,#d5d5d5); }
+  .status-btn.st-occupied { color:#8a2010; background: linear-gradient(180deg,#ffe8e0,#f0b0a8); }
+  .status-btn.st-lunch { color:#8a5f10; background: linear-gradient(180deg,#fff6e0,#f0dfa8); }
+
+  .status-overlay {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.35); z-index:55; padding:14px;
+  }
+  .status-overlay.open { display:flex; }
+  .status-box {
+    width:min(280px, 90vw); background:#ece9d8; border:1px solid #0a246a;
+    border-radius:5px; box-shadow:3px 3px 12px rgba(0,0,0,0.5); overflow:hidden;
+  }
+  .status-menu { display:flex; flex-direction:column; background:#fff; }
+  .status-menu-item { padding:10px 12px; font-size:14px; text-align:left; cursor:pointer; font-weight:normal; color:#222; display:flex; align-items:center; gap:8px; }
+  .status-menu-item:hover { background:#e5edfb; }
+  .dot { width:16px; height:16px; flex-shrink:0; }
+
+  .my-info-lines { flex:1; line-height:1.4; font-size:12px; color:#444; min-width:0; }
+  .info-row-combined { display:flex; align-items:center; gap:8px; }
+  .my-info-lines .info-row { display:flex; align-items:center; gap:4px; cursor:pointer; padding:2px 5px; border-radius:2px; }
+  .my-info-lines .info-row:hover { background:rgba(0,0,0,0.05); }
+  .my-info-lines .info-row .placeholder { color:#aaa; font-style:italic; }
+
+  /* --- CHAT --- */
+  .chat-overlay { position: fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.2); padding:10px; }
+  .chat-overlay.open { display:flex; }
+  .chat-window { width: 300px; max-width:100%; background:#ece9d8; border:1px solid #0a246a; border-radius:5px; box-shadow:3px 3px 12px rgba(0,0,0,0.5); overflow:hidden; display:flex; flex-direction:column; }
+  .chat-tab-row { display:flex; flex:1; min-width:0; background:#f7f5ee; border-bottom:none; padding:4px 4px 0; gap:3px; overflow-x:auto; }
+  .chat-tab {
+    display:flex; flex-direction:column; gap:1px; padding:5px 10px; font-size:13px;
+    background:transparent; border:none; border-bottom:3px solid transparent;
+    color:#1c3f6e; cursor:pointer; flex-shrink:0; max-width:170px;
+    opacity:0.5;
+  }
+  .chat-tab.active-tab { opacity:1; border-bottom-color:#2f6fc2; }
+  .chat-tab .tab-top-row { display:flex; align-items:center; gap:5px; }
+  .chat-tab .tab-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:130px; font-weight:bold; }
+  .chat-tab .tab-status-text { font-size:11px; color:#777; display:flex; align-items:center; gap:3px; overflow:hidden; white-space:nowrap; }
+  .chat-tab .tab-xstatus-icon { width:14px; height:14px; flex-shrink:0; }
+  .chat-info-bar { display:flex; align-items:center; gap:6px; padding:6px 8px; background:#f7f5ee; border-bottom:1px solid #c8c8c8; font-size:13px; color:#444; }
+  .info-lines-right { text-align:right; font-size:11px; color:#999; line-height:1.4; flex-shrink:0; }
+  .clickable-avatar { cursor:pointer; }
+  .clickable-avatar:hover { outline:2px solid #7f9db9; }
+
+  .avatar-picker-overlay {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.35); z-index:50; padding:14px;
+  }
+  .avatar-picker-overlay.open { display:flex; }
+  .avatar-picker-box {
+    width:min(420px, 92vw); max-height:85vh; background:#ece9d8; border:1px solid #0a246a;
+    border-radius:5px; box-shadow:3px 3px 12px rgba(0,0,0,0.5); overflow:hidden; display:flex; flex-direction:column;
+  }
+  .avatar-upload-row { padding:8px 10px; background:#f4f2ea; border-bottom:1px solid #c8c8c8; }
+  .avatar-upload-btn {
+    width:100%; padding:8px; font-size:14px; font-weight:bold; text-align:center; cursor:pointer;
+    border:1px solid #14336e; border-radius:2px; background: linear-gradient(180deg,#eef4ff,#c7d8f2);
+  }
+  .avatar-upload-status { font-size:12px; color:#666; text-align:center; margin-top:4px; min-height:14px; }
+  .avatar-picker-grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:6px; padding:10px; overflow-y:auto; background:#fff;
+  }
+  .avatar-picker-grid img { width:100%; aspect-ratio:1; cursor:pointer; border-radius:3px; image-rendering:pixelated; object-fit:cover; }
+  .avatar-picker-grid img:hover { outline:2px solid #7f9db9; }
+
+  .avatar-viewer-overlay {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.75); z-index:60; padding:20px; cursor:pointer;
+  }
+  .avatar-viewer-overlay.open { display:flex; }
+  .avatar-viewer-box { display:flex; flex-direction:column; align-items:center; gap:10px; cursor:default; }
+  .avatar-viewer-box img {
+    max-width:min(300px, 80vw); max-height:60vh; image-rendering:pixelated; object-fit:contain;
+    border:3px solid #fff; border-radius:6px; background:#fff;
+  }
+  .avatar-viewer-name { color:#fff; font-size:16px; font-weight:bold; text-shadow:0 1px 3px rgba(0,0,0,0.6); }
+  .chat-info-bar .qip-logo-lg { width:52px; height:52px; flex-shrink:0; position:relative; font-size:38px; display:flex; align-items:center; justify-content:center; }
+  .chat-info-bar .qip-logo-lg img { width:52px; height:52px; image-rendering:pixelated; border-radius:4px; object-fit:cover; }
+  .qip-logo-lg::before { content:''; }
+  .qip-logo-lg.st-online::after, .qip-logo-lg.st-away::after, .qip-logo-lg.st-busy::after, .qip-logo-lg.st-invisible::after, .qip-logo-lg.st-offline::after,
+  .qip-logo-lg.st-ffc::after, .qip-logo-lg.st-na::after, .qip-logo-lg.st-occupied::after, .qip-logo-lg.st-lunch::after {
+    content:''; position:absolute; right:-3px; bottom:-3px; width:20px; height:20px;
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+  }
+  .qip-logo-lg.st-online::after { background-image:url(/status-icons/online.png); }
+  .qip-logo-lg.st-away::after { background-image:url(/status-icons/away.png); }
+  .qip-logo-lg.st-busy::after { background-image:url(/status-icons/busy.png); }
+  .qip-logo-lg.st-invisible::after { background-image:url(/status-icons/invisible.png); }
+  .qip-logo-lg.st-offline::after { background-image:url(/status-icons/offline.png); }
+  .qip-logo-lg.st-ffc::after { background-image:url(/status-icons/ffc.png); }
+  .qip-logo-lg.st-na::after { background-image:url(/status-icons/na.png); }
+  .qip-logo-lg.st-occupied::after { background-image:url(/status-icons/occupied.png); }
+  .qip-logo-lg.st-lunch::after { background-image:url(/status-icons/lunch.png); }
+
+  .tab-status-dot {
+    width:16px; height:16px; flex-shrink:0; background-size:contain; background-repeat:no-repeat; background-position:center;
+  }
+  .tab-status-dot.st-online { background-image:url(/status-icons/online.png); }
+  .tab-status-dot.st-away { background-image:url(/status-icons/away.png); }
+  .tab-status-dot.st-busy { background-image:url(/status-icons/busy.png); }
+  .tab-status-dot.st-invisible { background-image:url(/status-icons/invisible.png); }
+  .tab-status-dot.st-offline { background-image:url(/status-icons/offline.png); }
+  .tab-status-dot.st-ffc { background-image:url(/status-icons/ffc.png); }
+  .tab-status-dot.st-na { background-image:url(/status-icons/na.png); }
+  .tab-status-dot.st-occupied { background-image:url(/status-icons/occupied.png); }
+  .tab-status-dot.st-lunch { background-image:url(/status-icons/lunch.png); }
+  .chat-info-bar .info-lines { flex:1; line-height:1.3; }
+  .typing-indicator { color:#3f9e2e; font-style:italic; font-weight:bold; }
+  .chat-body { flex:1; min-height:0; background:#fff; overflow-y:auto; padding:8px; font-size:15px; color:#111; }
+  .msg { margin-bottom:6px; line-height:1.35; }
+  .msg .who { font-weight:bold; }
+  .msg .time { font-weight:normal; font-size:13px; color:#666; }
+  .msg.me .who { color:#1c4bb0; }
+  .msg.them .who { color:#a01414; }
+  .msg .txt { display:block; }
+
+  .chat-toolbar { display:flex; gap:2px; padding:3px 5px; background: linear-gradient(180deg,#f4f2ea,#d9d6c8); border-top:1px solid #a8a8a8; position:relative; }
+  .chat-toolbar .tb-icon { width:20px; }
+  .chat-toolbar .tb-icon.active { background:#c8daf5; border-color:#7f9db9; }
+
+  .emoji-picker {
+    position:absolute; bottom:100%; left:0; width:100%; max-height:180px; overflow-y:auto;
+    background:#fff; border:1px solid #7f9db9; border-radius:3px 3px 0 0; box-shadow:0 -2px 8px rgba(0,0,0,0.25);
+    display:none; flex-wrap:wrap; align-content:flex-start; gap:4px; padding:6px;
+  }
+  .emoji-picker.open { display:flex; }
+  .emoji-picker img { height:30px; width:auto; cursor:pointer; border-radius:2px; image-rendering:pixelated; padding:2px; }
+  .emoji-picker img:hover { background:#e5edfb; outline:1px solid #7f9db9; }
+
+  .msg-emoji { height:36px; width:auto; vertical-align:middle; image-rendering:pixelated; }
+  .chat-input-row { border-top:1px solid #b7c3d6; }
+  .chat-input-row textarea {
+    width:100%; height:80px; font-size:18px; padding:10px; border:none; resize:none; font-family: Tahoma, sans-serif;
+  }
+  .chat-bottom-row { display:flex; align-items:center; gap:4px; padding:4px; background: linear-gradient(180deg,#f4f2ea,#d9d6c8); border-top:1px solid #a8a8a8; }
+  .chat-bottom-row .qip-logo-sm { width:52px; height:52px; flex-shrink:0; position:relative; font-size:38px; display:flex; align-items:center; justify-content:center; }
+  .chat-bottom-row .qip-logo-sm img { width:52px; height:52px; image-rendering:pixelated; border-radius:4px; object-fit:cover; }
+  .close-btn { display:flex; align-items:center; gap:3px; padding:6px 10px; font-size:14px; border:1px solid #14336e; border-radius:2px; background: linear-gradient(180deg,#f5f9ff,#c7d8f2); cursor:pointer; }
+  .send-btn { margin-left:auto; padding:6px 14px; font-size:14px; font-weight:bold; border:1px solid #14336e; border-radius:2px; background: linear-gradient(180deg,#eaffea,#c7f0c7); cursor:pointer; }
+
+  ::-webkit-scrollbar { width:12px; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#c9d3e4,#9fb0cc); border:1px solid #7f8fac; }
+  /* --- МОБИЛЬНЫЙ ЭКРАН: разворачиваем на весь viewport --- */
+  @media (max-width: 700px) {
+    body {
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+
+    .login-window {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .qip-window {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .chat-overlay {
+      padding: 0;
+    }
+
+    .chat-window {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-window" id="loginBox">
+  <div class="titlebar">
+    <div class="tleft"><div class="qip-logo"></div><span>Start to Quiet Instant Messaging with QIP!</span></div>
+    <div class="winbtns"><div class="winbtn">×</div></div>
+  </div>
+  <div class="login-body">
+    <div class="login-groupbox">
+      <div class="gb-title">[QIP] Accounts manager</div>
+      <div class="login-error" id="loginError"></div>
+      <div class="login-flex">
+        <div class="left">
+          <div class="login-row">
+            <label>Ник:</label>
+            <input type="text" id="nicknameInput" placeholder="Твой ник..." maxlength="24" onkeydown="if(event.key==='Enter')doLogin()"/>
+          </div>
+          <div class="login-row">
+            <label>Пароль:</label>
+            <input type="text" disabled placeholder="не требуется" style="background:#e8e8e0;"/>
+          </div>
+        </div>
+        <div class="right">
+          <div class="win-btn primary" onclick="doLogin()">Войти</div>
+          <div class="win-btn disabled">Just open</div>
+          <div class="win-btn disabled">Server / Proxy</div>
+        </div>
+      </div>
+    </div>
+    <div class="login-footer">
+      <span>[QIP] Регистрация нового ника</span>
+      <span>▾</span>
+    </div>
+  </div>
+</div>
+
+<div class="qip-window" id="mainWindow">
+  <div class="titlebar">
+    <div class="tleft"><div class="qip-logo clickable-avatar" id="myAvatarTitle" onclick="openAvatarPicker()"></div><span>QIP 2026</span></div>
+    <div class="winbtns"><div class="winbtn">_</div><div class="winbtn">□</div></div>
+  </div>
+  <div class="toolbar">
+    <div class="tb-icon tb-clover">❀</div>
+    <div class="tb-icon tb-g">G</div>
+    <div class="tb-icon">🔊</div>
+    <div class="tb-icon clickable-avatar" onclick="toggleXStatusPicker()" title="X-статус">🙂</div>
+    <div class="tb-icon tb-h">H</div>
+    <div class="tb-icon">🔧</div>
+    <div class="tb-icon">ℹ</div>
+  </div>
+
+  <div class="minimized-chats-bar" id="minimizedChatsBar" onclick="reopenChat()">
+    <span>💬 Открытых чатов: <span id="minimizedCount">0</span></span>
+    <span>Открыть ▸</span>
+  </div>
+  <div class="contact-list" id="contactList"></div>
+
+  <div class="bottombar">
+    <div class="bottombar-row">
+      <div class="bb-btn" style="flex:2;">+ Добавить контакт</div>
+      <div class="bb-btn bb-icon">🔍</div>
+      <div class="bb-btn bb-icon">?</div>
+    </div>
+    <div class="bottombar-row">
+      <div class="status-btn" id="statusBtn" style="flex:1;" onclick="toggleStatusMenu()">
+        <img id="myStatusIcon" class="dot" src="/status-icons/online.png" alt=""><span id="myXStatusIcon" style="display:none;"></span><span id="myStatus">Online</span>
+      </div>
+      <div class="xstatus-quick-btn" onclick="toggleXStatusPicker()" title="X-статус">🙂</div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-overlay" id="chatOverlay">
+  <div class="chat-window">
+    <div class="chat-tab-row-wrap">
+      <div class="chat-tab-row" id="chatTabRow"></div>
+      <div class="chat-window-controls">
+        <div class="winbtn" onclick="minimizeChat()">_</div>
+        <div class="winbtn" onclick="closeChat()">×</div>
+      </div>
+    </div>
+    <div class="chat-info-bar">
+      <div class="qip-logo-lg clickable-avatar" id="chatPeerFlower" onclick="viewCurrentPeerAvatar()"></div>
+      <div class="info-lines">
+        <div><b>Name:</b> <span id="chatTitle"></span> <span id="chatPeerXStatus" style="display:none;vertical-align:middle;"></span></div>
+        <div><b>Status:</b> <span id="chatPeerStatus">—</span></div>
+      </div>
+      <div class="info-lines-right">
+        <div>ID: <span id="chatPeerId">—</span></div>
+        <div>QIP ver. 2005 (8000)</div>
+      </div>
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-toolbar">
+      <div class="emoji-picker" id="emojiPicker"></div>
+      <div class="tb-icon" id="emojiToggle" onclick="toggleEmojiPicker()">☺</div>
+      <div class="tb-icon">T</div>
+      <div class="tb-icon">↩</div>
+      <div class="tb-icon">💾</div>
+      <div class="tb-icon">✱</div>
+      <div class="tb-icon">H</div>
+    </div>
+    <div class="chat-input-row">
+      <textarea id="chatInput" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendMsg();}" oninput="handleTyping()"></textarea>
+    </div>
+    <div class="chat-bottom-row">
+      <div class="qip-logo-sm clickable-avatar" id="myAvatarSm" onclick="openAvatarPicker()"></div>
+      <div class="my-info-lines">
+        <div><b>Name:</b> <span id="myNameChat"></span></div>
+        <div class="info-row-combined">
+          <span class="info-row" onclick="toggleStatusMenu()">
+            <img id="myStatusIconChat" class="dot" src="/status-icons/online.png" alt=""><span id="myStatusTextChat">Online</span>
+          </span>
+          <span class="info-row" onclick="toggleXStatusPicker()">
+            <span id="myXStatusIconChat" style="display:none;"></span><span id="myXStatusPlaceholder" class="placeholder">X-stat</span>
+          </span>
+        </div>
+      </div>
+      <div class="send-btn" onclick="sendMsg()">Send ▾</div>
+    </div>
+  </div>
+</div>
+
+<div class="avatar-picker-overlay" id="avatarPickerOverlay">
+  <div class="avatar-picker-box">
+    <div class="titlebar">
+      <div class="tleft"><div class="qip-logo"></div><span>Выбери аватарку</span></div>
+      <div class="winbtns"><div class="winbtn" onclick="closeAvatarPicker()">×</div></div>
+    </div>
+    <div class="avatar-upload-row">
+      <div class="avatar-upload-btn" onclick="document.getElementById('avatarFileInput').click()">📁 Загрузить свою картинку</div>
+      <input type="file" id="avatarFileInput" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="uploadAvatarFile(this)"/>
+      <div class="avatar-upload-status" id="avatarUploadStatus"></div>
+    </div>
+    <div class="avatar-picker-grid" id="avatarPickerGrid"></div>
+  </div>
+</div>
+
+<div class="avatar-viewer-overlay" id="avatarViewerOverlay" onclick="closeAvatarViewer()">
+  <div class="avatar-viewer-box" onclick="event.stopPropagation()">
+    <img id="avatarViewerImg" src="" alt="">
+    <div class="avatar-viewer-name" id="avatarViewerName"></div>
+  </div>
+</div>
+
+<div class="status-overlay" id="statusOverlay" onclick="closeStatusMenu()">
+  <div class="status-box" onclick="event.stopPropagation()">
+    <div class="titlebar">
+      <div class="tleft"><div class="qip-logo"></div><span>Мой статус</span></div>
+      <div class="winbtns"><div class="winbtn" onclick="closeStatusMenu()">×</div></div>
+    </div>
+    <div class="status-menu">
+      <div class="status-menu-item" onclick="setMyStatus('online')"><img class="dot" src="/status-icons/online.png" alt="">Online</div>
+      <div class="status-menu-item" onclick="setMyStatus('ffc')"><img class="dot" src="/status-icons/ffc.png" alt="">Готов общаться</div>
+      <div class="status-menu-item" onclick="setMyStatus('away')"><img class="dot" src="/status-icons/away.png" alt="">Отошёл</div>
+      <div class="status-menu-item" onclick="setMyStatus('lunch')"><img class="dot" src="/status-icons/lunch.png" alt="">Обедаю</div>
+      <div class="status-menu-item" onclick="setMyStatus('na')"><img class="dot" src="/status-icons/na.png" alt="">Недоступен</div>
+      <div class="status-menu-item" onclick="setMyStatus('occupied')"><img class="dot" src="/status-icons/occupied.png" alt="">Занят делами</div>
+      <div class="status-menu-item" onclick="setMyStatus('busy')"><img class="dot" src="/status-icons/busy.png" alt="">Не беспокоить</div>
+      <div class="status-menu-item" onclick="setMyStatus('invisible')"><img class="dot" src="/status-icons/invisible.png" alt="">Невидимка</div>
+    </div>
+  </div>
+</div>
+
+<div class="xstatus-overlay" id="xstatusOverlay" onclick="closeXStatusPicker()">
+  <div class="xstatus-box" onclick="event.stopPropagation()">
+    <div class="titlebar">
+      <div class="tleft"><div class="qip-logo"></div><span>Выбери X-статус</span></div>
+      <div class="winbtns"><div class="winbtn" onclick="closeXStatusPicker()">×</div></div>
+    </div>
+    <div class="xstatus-custom-row">
+      <input type="text" id="xstatusCustomInput" placeholder="Своё слово..." maxlength="20" onkeydown="if(event.key==='Enter'){event.preventDefault();setCustomXStatus();}">
+      <div class="xstatus-custom-btn" onclick="setCustomXStatus()">OK</div>
+    </div>
+    <div class="xstatus-picker" id="xstatusPicker"></div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+let me = null;
+let socket = null;
+let currentPeer = null;
+let usersCache = [];
+
+async function doLogin(){
+  const nickname = document.getElementById('nicknameInput').value.trim();
+  const errBox = document.getElementById('loginError');
+  errBox.textContent = '';
+  if(!nickname){ errBox.textContent = 'Введи ник'; return; }
+
+  const res = await fetch('/api/login', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ nickname })
+  });
+  const data = await res.json();
+  if(data.error){ errBox.textContent = data.error; return; }
+
+  me = data;
+  localStorage.setItem('qip_me', JSON.stringify(me));
+  startApp();
+}
+
+function startApp(){
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('mainWindow').style.display = 'flex';
+  updateMyAvatarDisplay();
+  updateMyStatusDisplay();
+
+  socket = io();
+
+  // критично: переидентифицируемся при КАЖДОМ подключении, включая автопереподключение
+  // (иначе после блокировки экрана/сворачивания вкладки сокет обрывается и переподключается
+  // с новым id, а сервер продолжает слать сообщения на старый — они "теряются" до reload)
+  socket.on('connect', () => {
+    socket.emit('identify', { nickname: me.nickname, userId: me.id });
+    if(myStatus !== 'online'){
+      socket.emit('set_status', { nickname: me.nickname, status: myStatus });
+    }
+    loadContacts();
+  });
+
+  socket.on('message', (payload) => {
+    if(currentPeer && (payload.from_id === currentPeer.id)){
+      appendMsg('them', payload.from_nickname, payload.body, fmtTime(payload.created_at));
+    } else {
+      unreadCounts[payload.from_id] = (unreadCounts[payload.from_id] || 0) + 1;
+      playNotifySound();
+    }
+    loadContacts();
+  });
+  socket.on('presence', () => loadContacts());
+  socket.on('typing', ({ fromNickname, isTyping }) => {
+    if(currentPeer && currentPeer.nickname === fromNickname){
+      showTypingIndicator(isTyping);
+    }
+  });
+
+  loadContacts();
+  setInterval(loadContacts, 8000);
+  setupIdleDetection();
+}
+
+// --- Мой статус (Online / Отошёл / Занят) ---
+let myStatus = 'online';
+let isAutoAway = false;
+const IDLE_TIMEOUT_MS = 5 * 60 * 1000; // 5 минут
+let idleTimer = null;
+
+function toggleStatusMenu(){
+  document.getElementById('statusOverlay').classList.toggle('open');
+}
+
+function closeStatusMenu(){
+  document.getElementById('statusOverlay').classList.remove('open');
+}
+
+function setMyStatus(status, auto){
+  myStatus = status;
+  isAutoAway = !!auto;
+  closeStatusMenu();
+  updateMyStatusDisplay();
+  if(socket){
+    socket.emit('set_status', { nickname: me.nickname, status });
+  }
+}
+
+function updateMyStatusDisplay(){
+  const btn = document.getElementById('statusBtn');
+  const label = document.getElementById('myStatus');
+  const icon = document.getElementById('myStatusIcon');
+  const iconChat = document.getElementById('myStatusIconChat');
+  const labelChat = document.getElementById('myStatusTextChat');
+  const ALL_STATUSES = ['away','busy','invisible','ffc','na','occupied','lunch'];
+  btn.classList.remove(...ALL_STATUSES.map(s => 'st-' + s));
+
+  const statusData = {
+    away:      { label: 'Отошёл',          src: '/status-icons/away.png' },
+    busy:      { label: 'Не беспокоить',   src: '/status-icons/busy.png' },
+    invisible: { label: 'Невидимка',       src: '/status-icons/invisible.png' },
+    ffc:       { label: 'Готов общаться',  src: '/status-icons/ffc.png' },
+    na:        { label: 'Недоступен',      src: '/status-icons/na.png' },
+    occupied:  { label: 'Занят делами',    src: '/status-icons/occupied.png' },
+    lunch:     { label: 'Обедаю',          src: '/status-icons/lunch.png' },
+    online:    { label: 'Online',          src: '/status-icons/online.png' }
+  };
+  const st = statusData[myStatus] || statusData.online;
+  if(ALL_STATUSES.includes(myStatus)){
+    btn.classList.add('st-' + myStatus);
+  }
+  label.textContent = me.nickname + ' — ' + st.label;
+  icon.src = st.src;
+  if(iconChat) iconChat.src = st.src;
+  if(labelChat) labelChat.textContent = st.label;
+  const nameChat = document.getElementById('myNameChat');
+  if(nameChat) nameChat.textContent = me.nickname;
+}
+
+// --- X-статусы (пиктограммы настроения/активности) ---
+const XSTATUS_LIST = [
+  {id:'music', label:'Музыка'},
+  {id:'coffee', label:'Кофе'},
+  {id:'beer', label:'Пиво'},
+  {id:'eating', label:'Ем'},
+  {id:'sleeping', label:'Сплю'},
+  {id:'tired', label:'Устал'},
+  {id:'sick', label:'Болею'},
+  {id:'angry', label:'Злюсь'},
+  {id:'funny', label:'Весело'},
+  {id:'thinking', label:'Думаю'},
+  {id:'typing', label:'Печатаю'},
+  {id:'phone', label:'По телефону'},
+  {id:'tv', label:'Смотрю ТВ'},
+  {id:'games', label:'Играю'},
+  {id:'surfing', label:'В интернете'},
+  {id:'business', label:'По делам'},
+  {id:'engineering', label:'Работаю'},
+  {id:'college', label:'Учусь'},
+  {id:'party', label:'На вечеринке'},
+  {id:'friends', label:'С друзьями'},
+  {id:'shopping', label:'За покупками'},
+  {id:'camera', label:'Фотографирую'},
+  {id:'duck', label:'Уточка'},
+  {id:'at', label:'Почта'},
+  {id:'mode', label:'Режим'},
+  {id:'china1', label:'Иероглиф'},
+  {id:'china4', label:'Иероглиф'},
+  {id:'china5', label:'Иероглиф'},
+  {id:'de1', label:'Значок'},
+  {id:'de2', label:'Значок'},
+  {id:'de3', label:'Значок'}
+];
+let myXStatus = null;
+let xstatusPickerBuilt = false;
+
+function toggleXStatusPicker(){
+  const overlay = document.getElementById('xstatusOverlay');
+  if(!xstatusPickerBuilt){
+    const picker = document.getElementById('xstatusPicker');
+    let html = '';
+    XSTATUS_LIST.forEach(s => {
+      html += `<img src="/status-icons/xstatus/${s.id}.png" title="${escapeHtml(s.label)}" onclick="setMyXStatus('${s.id}')" alt="">`;
+    });
+    html += `<div class="xstatus-clear" onclick="setMyXStatus(null)">Убрать</div>`;
+    picker.innerHTML = html;
+    xstatusPickerBuilt = true;
+  }
+  overlay.classList.toggle('open');
+}
+
+function closeXStatusPicker(){
+  document.getElementById('xstatusOverlay').classList.remove('open');
+}
+
+// возвращает HTML для отображения X-статуса: картинка из пака ИЛИ текстовый бейдж своего слова
+function renderXStatusBadge(xstatus){
+  if(!xstatus) return '';
+  if(xstatus.startsWith('custom:')){
+    const word = xstatus.slice(7);
+    return `<span class="xstatus-custom-badge">${escapeHtml(word)}</span>`;
+  }
+  return `<img class="dot" src="/status-icons/xstatus/${xstatus}.png" alt="">`;
+}
+
+function setCustomXStatus(){
+  const input = document.getElementById('xstatusCustomInput');
+  let word = input.value.trim();
+  if(!word) return;
+  // ограничение — одно слово: обрезаем по первому пробелу, если вдруг вставили фразу
+  word = word.split(/\s+/)[0].slice(0, 20);
+  setMyXStatus('custom:' + word);
+  input.value = '';
+}
+
+function setMyXStatus(id){
+  myXStatus = id;
+  const icon = document.getElementById('myXStatusIcon');
+  const iconChat = document.getElementById('myXStatusIconChat');
+  const placeholder = document.getElementById('myXStatusPlaceholder');
+  const badge = renderXStatusBadge(id);
+  if(id){
+    icon.innerHTML = badge;
+    icon.style.display = 'inline';
+    if(iconChat){ iconChat.innerHTML = badge; iconChat.style.display = 'inline'; }
+    if(placeholder) placeholder.style.display = 'none';
+  } else {
+    icon.style.display = 'none';
+    if(iconChat) iconChat.style.display = 'none';
+    if(placeholder) placeholder.style.display = 'inline';
+  }
+  closeXStatusPicker();
+  if(socket){
+    socket.emit('set_xstatus', { nickname: me.nickname, xstatus: id });
+  }
+}
+
+function setupIdleDetection(){
+  const resetIdle = () => {
+    clearTimeout(idleTimer);
+    if(isAutoAway){
+      // активность после авто-"отошёл" — возвращаем Online автоматически
+      setMyStatus('online', false);
+    }
+    idleTimer = setTimeout(() => {
+      if(myStatus === 'online'){
+        setMyStatus('away', true);
+      }
+    }, IDLE_TIMEOUT_MS);
+  };
+  ['mousedown','touchstart','keydown','scroll'].forEach(evt =>
+    document.addEventListener(evt, resetIdle, { passive: true })
+  );
+  resetIdle();
+}
+
+let unreadCounts = {};
+
+function playNotifySound(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 880;
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.25);
+  } catch(e){}
+}
+
+async function loadContacts(){
+  const res = await fetch('/api/users');
+  const users = await res.json();
+  usersCache = users.filter(u => u.nickname !== me.nickname);
+
+  const online = usersCache.filter(u => u.online);
+  const offline = usersCache.filter(u => !u.online);
+
+  const list = document.getElementById('contactList');
+  list.innerHTML = '';
+  list.appendChild(renderGroup('online', `В сети - ${online.length}`, online));
+  list.appendChild(renderGroup('offline', `Не в сети - ${offline.length}`, offline));
+
+  if(usersCache.length === 0){
+    list.innerHTML = '<div style="padding:14px;color:#5a6b8a;text-align:center;font-size:11px;">Пока никого нет.<br>Пусть остальные тоже зайдут под своим ником.</div>';
+  }
+
+  // освежаем статусы всех открытых вкладок (цвет цветочка на каждой), не только активной
+  if(openChatsOrder.length > 0){
+    openChatsOrder.forEach(pid => {
+      const fresh = usersCache.find(u => u.id === pid);
+      if(fresh) openChatsData.set(pid, fresh);
+    });
+    if(activePeerId !== null){
+      const freshActive = openChatsData.get(activePeerId);
+      if(freshActive){
+        currentPeer = freshActive;
+        applyPeerStatusUI(freshActive);
+      }
+    }
+    renderChatTabs();
+  }
+}
+
+const STATUS_LABELS = {
+  online: 'online', away: 'отошёл', busy: 'не беспокоить', invisible: 'невидимка', offline: 'офлайн',
+  ffc: 'готов общаться', na: 'недоступен', occupied: 'занят делами', lunch: 'обедает'
+};
+
+function renderGroup(key, title, users){
+  const wrap = document.createElement('div');
+  const header = document.createElement('div');
+  header.className = 'group-header';
+  header.innerHTML = `<span class="arrow">▾</span><span>${title}</span>`;
+  const body = document.createElement('div');
+  body.className = 'group-body';
+
+  header.onclick = () => {
+    header.classList.toggle('collapsed');
+    body.classList.toggle('collapsed');
+  };
+
+  users.forEach(u => {
+    const div = document.createElement('div');
+    div.className = 'contact' + (currentPeer && currentPeer.id === u.id ? ' active' : '');
+    const avatarHtml = renderAvatar(u.avatar_emoji);
+    const unread = unreadCounts[u.id] || 0;
+    const st = u.status || (u.online ? 'online' : 'offline');
+    const xicon = renderXStatusBadge(u.xstatus);
+    div.innerHTML = `
+      <div class="avatar is-${st} clickable-avatar">${avatarHtml}</div>
+      <span class="cname ${st}">${u.nickname}</span>${xicon}
+      ${unread > 0 ? `<span class="unread-badge">${unread}</span>` : `<span class="cstatus">${STATUS_LABELS[st]}</span>`}
+    `;
+    div.onclick = () => openChat(u);
+    div.querySelector('.avatar').onclick = (e) => { e.stopPropagation(); viewAvatar(u.avatar_emoji, u.nickname); };
+    body.appendChild(div);
+  });
+
+  wrap.appendChild(header);
+  wrap.appendChild(body);
+  return wrap;
+}
+
+// --- Множественные вкладки чата ---
+let openChatsOrder = [];        // порядок id открытых собеседников
+let openChatsData = new Map();  // id -> объект пользователя
+let activePeerId = null;
+
+function applyPeerStatusUI(user){
+  const st = user.status || (user.online ? 'online' : 'offline');
+  peerBaseStatus = STATUS_LABELS[st].charAt(0).toUpperCase() + STATUS_LABELS[st].slice(1);
+  if(!isShowingTyping){
+    document.getElementById('chatPeerStatus').textContent = peerBaseStatus;
+  }
+  document.getElementById('chatPeerId').textContent = user.id;
+  const flowerLg = document.getElementById('chatPeerFlower');
+  flowerLg.innerHTML = renderAvatar(user.avatar_emoji);
+  ['st-online','st-away','st-busy','st-invisible','st-offline'].forEach(c => flowerLg.classList.remove(c));
+  flowerLg.classList.add('st-' + st);
+
+  const xicon = document.getElementById('chatPeerXStatus');
+  if(user.xstatus){
+    xicon.innerHTML = renderXStatusBadge(user.xstatus);
+    xicon.style.display = 'inline';
+  } else {
+    xicon.style.display = 'none';
+  }
+}
+
+function renderChatTabs(){
+  const row = document.getElementById('chatTabRow');
+  row.innerHTML = '';
+  openChatsOrder.forEach(pid => {
+    const peer = openChatsData.get(pid);
+    if(!peer) return;
+    const st = peer.status || (peer.online ? 'online' : 'offline');
+    const xicon = renderXStatusBadge(peer.xstatus);
+    const tab = document.createElement('div');
+    tab.className = 'chat-tab' + (pid === activePeerId ? ' active-tab' : '');
+    tab.innerHTML = `
+      <div class="tab-top-row">
+        <span class="tab-status-dot st-${st}"></span>
+        <span class="tab-name">${escapeHtml(peer.nickname)}</span>
+      </div>
+      <span class="tab-status-text">${escapeHtml(STATUS_LABELS[st] || st)}${xicon}</span>
+    `;
+    tab.onclick = () => switchTab(pid);
+    row.appendChild(tab);
+  });
+}
+
+async function loadHistoryForPeer(user){
+  const res = await fetch(`/api/history/${me.id}/${user.id}`);
+  const history = await res.json();
+  const body = document.getElementById('chatBody');
+  body.innerHTML = '';
+  history.forEach(m => {
+    const who = m.from_id === me.id ? 'me' : 'them';
+    const name = m.from_id === me.id ? me.nickname : user.nickname;
+    appendMsg(who, name, m.body, fmtTime(m.created_at));
+  });
+}
+
+function clearTypingIndicator(){
+  clearTimeout(remoteTypingTimeout);
+  isShowingTyping = false;
+}
+
+function switchTab(pid){
+  const peer = openChatsData.get(pid);
+  if(!peer) return;
+  activePeerId = pid;
+  currentPeer = peer;
+  unreadCounts[pid] = 0;
+  clearTypingIndicator();
+  document.getElementById('chatTitle').textContent = peer.nickname;
+  applyPeerStatusUI(peer);
+  renderChatTabs();
+  loadContacts();
+  loadHistoryForPeer(peer);
+}
+
+function closeTab(pid){
+  const idx = openChatsOrder.indexOf(pid);
+  if(idx === -1) return;
+  openChatsOrder.splice(idx, 1);
+  openChatsData.delete(pid);
+
+  if(activePeerId === pid){
+    if(openChatsOrder.length > 0){
+      const nextIdx = Math.min(idx, openChatsOrder.length - 1);
+      switchTab(openChatsOrder[nextIdx]);
+    } else {
+      activePeerId = null;
+      currentPeer = null;
+      document.getElementById('chatOverlay').classList.remove('open');
+    }
+  } else {
+    renderChatTabs();
+  }
+  updateMinimizedBar();
+}
+
+async function openChat(user){
+  if(!openChatsData.has(user.id)){
+    openChatsOrder.push(user.id);
+  }
+  openChatsData.set(user.id, user);
+  activePeerId = user.id;
+  currentPeer = user;
+  unreadCounts[user.id] = 0;
+  clearTypingIndicator();
+  document.getElementById('chatTitle').textContent = user.nickname;
+  applyPeerStatusUI(user);
+  renderChatTabs();
+  document.getElementById('chatOverlay').classList.add('open');
+  updateMinimizedBar();
+  loadContacts();
+  await loadHistoryForPeer(user);
+}
+
+let typingEmitTimer = null;
+let typingStopTimer = null;
+let peerBaseStatus = '—';
+
+function handleTyping(){
+  if(!currentPeer || !socket) return;
+
+  if(!typingEmitTimer){
+    socket.emit('typing', { toNickname: currentPeer.nickname, fromNickname: me.nickname, isTyping: true });
+    typingEmitTimer = setTimeout(() => { typingEmitTimer = null; }, 2000);
+  }
+
+  clearTimeout(typingStopTimer);
+  typingStopTimer = setTimeout(() => {
+    if(currentPeer){
+      socket.emit('typing', { toNickname: currentPeer.nickname, fromNickname: me.nickname, isTyping: false });
+    }
+  }, 2500);
+}
+
+let remoteTypingTimeout = null;
+let isShowingTyping = false;
+function showTypingIndicator(isTyping){
+  const el = document.getElementById('chatPeerStatus');
+  clearTimeout(remoteTypingTimeout);
+  isShowingTyping = isTyping;
+  if(isTyping){
+    el.innerHTML = '<span class="typing-indicator">печатает...</span>';
+    remoteTypingTimeout = setTimeout(() => { isShowingTyping = false; el.textContent = peerBaseStatus; }, 4000);
+  } else {
+    el.textContent = peerBaseStatus;
+  }
+}
+
+function minimizeChat(){
+  document.getElementById('chatOverlay').classList.remove('open');
+  updateMinimizedBar();
+}
+
+function reopenChat(){
+  if(openChatsOrder.length > 0){
+    document.getElementById('chatOverlay').classList.add('open');
+    updateMinimizedBar();
+  }
+}
+
+function updateMinimizedBar(){
+  const bar = document.getElementById('minimizedChatsBar');
+  const overlayOpen = document.getElementById('chatOverlay').classList.contains('open');
+  if(openChatsOrder.length > 0 && !overlayOpen){
+    bar.classList.add('show');
+    document.getElementById('minimizedCount').textContent = openChatsOrder.length;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+function closeChat(){
+  clearTimeout(remoteTypingTimeout);
+  clearTimeout(typingStopTimer);
+  if(activePeerId !== null){
+    closeTab(activePeerId);
+  } else {
+    document.getElementById('chatOverlay').classList.remove('open');
+  }
+  updateMinimizedBar();
+  loadContacts();
+}
+
+function appendMsg(who, name, txt, time){
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = 'msg ' + who;
+  div.innerHTML = `<span class="who">${escapeHtml(name)} <span class="time">(${time})</span>:</span><span class="txt">${renderMsgText(txt)}</span>`;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function sendMsg(){
+  const input = document.getElementById('chatInput');
+  const val = input.value.trim();
+  if(!val || !currentPeer) return;
+
+  socket.emit('message', {
+    toId: currentPeer.id,
+    toNickname: currentPeer.nickname,
+    fromId: me.id,
+    fromNickname: me.nickname,
+    body: val
+  });
+  appendMsg('me', me.nickname, val, fmtTime(Date.now()));
+  input.value = '';
+  document.getElementById('emojiPicker').classList.remove('open');
+  document.getElementById('emojiToggle').classList.remove('active');
+}
+
+function renderAvatar(value){
+  if(value && value.includes('/')){
+    return `<img src="/${value}" alt="">`;
+  }
+  return value || '👤';
+}
+
+function updateMyAvatarDisplay(){
+  const html = renderAvatar(me.avatar_emoji);
+  ['myAvatarSm','myAvatarTitle'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){ el.innerHTML = html; el.classList.add('has-avatar'); }
+  });
+}
+
+let avatarPickerBuilt = false;
+function openAvatarPicker(){
+  const overlay = document.getElementById('avatarPickerOverlay');
+  if(!avatarPickerBuilt){
+    const grid = document.getElementById('avatarPickerGrid');
+    let html = '';
+    for(let i = 1; i <= KOLOBKI_COUNT; i++){
+      const num = String(i).padStart(3, '0');
+      html += `<img src="/kolobki/KolobkiQIP2005_${num}.webp" onclick="chooseAvatar('${num}')" alt="">`;
+    }
+    grid.innerHTML = html;
+    avatarPickerBuilt = true;
+  }
+  overlay.classList.add('open');
+}
+
+function closeAvatarPicker(){
+  document.getElementById('avatarPickerOverlay').classList.remove('open');
+}
+
+function viewAvatar(value, name){
+  const img = document.getElementById('avatarViewerImg');
+  if(value && value.includes('/')){
+    img.src = '/' + value;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+  document.getElementById('avatarViewerName').textContent = name || '';
+  document.getElementById('avatarViewerOverlay').classList.add('open');
+}
+
+function closeAvatarViewer(){
+  document.getElementById('avatarViewerOverlay').classList.remove('open');
+}
+
+function viewCurrentPeerAvatar(){
+  if(currentPeer) viewAvatar(currentPeer.avatar_emoji, currentPeer.nickname);
+}
+
+async function chooseAvatar(num){
+  const avatar = `kolobki/KolobkiQIP2005_${num}.webp`;
+  const res = await fetch('/api/set-avatar', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ userId: me.id, avatar })
+  });
+  const data = await res.json();
+  if(!data.error){
+    me.avatar_emoji = avatar;
+    localStorage.setItem('qip_me', JSON.stringify(me));
+    updateMyAvatarDisplay();
+  }
+  closeAvatarPicker();
+}
+
+async function uploadAvatarFile(input){
+  const file = input.files && input.files[0];
+  const statusEl = document.getElementById('avatarUploadStatus');
+  if(!file) return;
+
+  if(file.size > 3 * 1024 * 1024){
+    statusEl.textContent = 'Файл слишком большой (максимум 3MB)';
+    return;
+  }
+
+  statusEl.textContent = 'Загружаю...';
+
+  const formData = new FormData();
+  formData.append('userId', me.id);
+  formData.append('avatar', file);
+
+  try{
+    const res = await fetch('/api/upload-avatar', { method:'POST', body: formData });
+    const data = await res.json();
+    if(data.error){
+      statusEl.textContent = data.error;
+      return;
+    }
+    me.avatar_emoji = data.avatar;
+    localStorage.setItem('qip_me', JSON.stringify(me));
+    updateMyAvatarDisplay();
+    statusEl.textContent = '';
+    closeAvatarPicker();
+  } catch(e){
+    statusEl.textContent = 'Ошибка загрузки, попробуй ещё раз';
+  }
+  input.value = '';
+}
+
+const SMILES = [
+  {id:'aa', aliases:['O:-)','O=)']},
+  {id:'ab', aliases:[':-)',':)','=)']},
+  {id:'ac', aliases:[':-(',':(',';(']},
+  {id:'ad', aliases:[';-)',';)']},
+  {id:'ae', aliases:[':-P']},
+  {id:'af', aliases:['8-)']},
+  {id:'ag', aliases:[':-D']},
+  {id:'ah', aliases:[':-[']},
+  {id:'ai', aliases:['=-O']},
+  {id:'aj', aliases:[':-*']},
+  {id:'ak', aliases:[':\'(']},
+  {id:'al', aliases:[':-X',':-x']},
+  {id:'am', aliases:['>:o']},
+  {id:'an', aliases:[':-|']},
+  {id:'ao', aliases:[':-\\',':-/']},
+  {id:'ap', aliases:['*JOKINGLY*']},
+  {id:'aq', aliases:[']:->']},
+  {id:'ar', aliases:['[:-}']},
+  {id:'as', aliases:['*KISSED*']},
+  {id:'at', aliases:[':-!']},
+  {id:'au', aliases:['*TIRED*']},
+  {id:'av', aliases:['*STOP*']},
+  {id:'aw', aliases:['*KISSING*']},
+  {id:'ax', aliases:['@}->--']},
+  {id:'ay', aliases:['*THUMBS UP*']},
+  {id:'az', aliases:['*DRINK*']},
+  {id:'ba', aliases:['*IN LOVE*']},
+  {id:'bb', aliases:['@=']},
+  {id:'bc', aliases:['*HELP*']},
+  {id:'bd', aliases:['\\m/']},
+  {id:'be', aliases:['%)']},
+  {id:'bf', aliases:['*OK*']},
+  {id:'bg', aliases:['*WASSUP*','*SUP*']},
+  {id:'bh', aliases:['*SORRY*']},
+  {id:'bi', aliases:['*BRAVO*']},
+  {id:'bj', aliases:['*ROFL*','*LOL*']},
+  {id:'bk', aliases:['*PARDON*']},
+  {id:'bl', aliases:['*NO*']},
+  {id:'bm', aliases:['*CRAZY*']},
+  {id:'bn', aliases:['*DONT_KNOW*','*UNKNOWN*']},
+  {id:'bo', aliases:['*DANCE*']},
+  {id:'bp', aliases:['*YAHOO*','*YAHOO!*']},
+  {id:'bq', aliases:['*HI*','*PREVED*','*PRIVET*','*HELLO*']},
+  {id:'br', aliases:['*BYE*']},
+  {id:'bs', aliases:['*YES*']},
+  {id:'bt', aliases:[';D','*ACUTE*']},
+  {id:'bu', aliases:['*WALL*','*DASH*']},
+  {id:'bv', aliases:['*WRITE*','*MAIL*']},
+  {id:'bw', aliases:['*SCRATCH*']}
+];
+
+// все алиасы отсортированы от длинных к коротким — чтобы ":-)" матчился раньше ")"-подобных обрезков
+const SMILE_ALIAS_LIST = [];
+SMILES.forEach(s => s.aliases.forEach(a => SMILE_ALIAS_LIST.push([a, s.id])));
+SMILE_ALIAS_LIST.sort((a, b) => b[0].length - a[0].length);
+
+let emojiPickerBuilt = false;
+
+function toggleEmojiPicker(){
+  const picker = document.getElementById('emojiPicker');
+  const btn = document.getElementById('emojiToggle');
+  if(!emojiPickerBuilt){
+    let html = '';
+    SMILES.forEach(s => {
+      html += `<img src="/smiles/${s.id}.gif" title="${escapeHtml(s.aliases[0])}" onclick="insertEmoji('${s.id}')" alt="">`;
+    });
+    picker.innerHTML = html;
+    emojiPickerBuilt = true;
+  }
+  picker.classList.toggle('open');
+  btn.classList.toggle('active');
+}
+
+function insertEmoji(id){
+  const input = document.getElementById('chatInput');
+  const token = `:smile_${id}:`;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  input.value = input.value.slice(0, start) + token + input.value.slice(end);
+  input.focus();
+  input.selectionStart = input.selectionEnd = start + token.length;
+}
+
+// заменяет классические текстовые смайлики (:-), ;-) и т.д.) на токены ДО экранирования HTML
+function autoDetectSmiles(rawText){
+  let result = rawText;
+  SMILE_ALIAS_LIST.forEach(([alias, id]) => {
+    if(result.includes(alias)){
+      result = result.split(alias).join(`:smile_${id}:`);
+    }
+  });
+  return result;
+}
+
+function renderMsgText(rawText){
+  const withTokens = autoDetectSmiles(rawText);
+  const escaped = escapeHtml(withTokens);
+  return escaped
+    .replace(/:smile_([a-z]{2}):/g, (m, id) => `<img class="msg-emoji" src="/smiles/${id}.gif" alt="">`)
+    .replace(/:kolobok_(\d{3}):/g, (m, num) => `<img class="msg-emoji" src="/kolobki/KolobkiQIP2005_${num}.webp" alt="">`);
+}
+
+function fmtTime(ts){
+  const d = new Date(ts);
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0') + ':' + d.getSeconds().toString().padStart(2,'0');
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const saved = localStorage.getItem('qip_me');
+if(saved){
+  me = JSON.parse(saved);
+  fetch('/api/login', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ nickname: me.nickname })
+  }).then(r=>r.json()).then(data=>{
+    if(!data.error){ me = data; startApp(); }
+  });
+}
+</script>
+</body>
+</html>

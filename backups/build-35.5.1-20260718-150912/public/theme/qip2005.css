@@ -1,0 +1,4679 @@
+/* QIP 2026 UI Engine — QIP 2005 / Windows XP visual system
+   CSS-only layer. Existing HTML/JS behavior remains intact. */
+
+:root {
+  --qip-face: #ece9d8;
+  --qip-face-light: #f7f5ed;
+  --qip-content: #f7fbff;
+  --qip-white: #fff;
+  --qip-border-dark: #003c74;
+  --qip-border-mid: #6f8198;
+  --qip-border-soft: #aca899;
+  --qip-highlight: #fff;
+  --qip-blue-top: #3d69a0;
+  --qip-blue-mid: #72a9d6;
+  --qip-blue-bottom: #4e78a3;
+  --qip-selection: #c6d9f6;
+  --qip-tab-accent: #f6b42a;
+  --qip-font: Tahoma, "MS Sans Serif", Arial, sans-serif;
+}
+
+html, body { font-family: var(--qip-font); }
+
+/* Shared native-window shell */
+.login-window,
+.qip-window,
+.chat-window,
+.status-box,
+.xstatus-box,
+.xstatus-caption-box,
+.avatar-picker-box,
+.profile-settings-box {
+  border-radius: 0 !important;
+  background: var(--qip-face) !important;
+  border: 1px solid #083b78 !important;
+  box-shadow:
+    0 0 0 1px #2d6ca4,
+    0 0 0 2px #9cc5e6,
+    0 0 0 3px #174f87,
+    inset 1px 1px 0 rgba(255,255,255,.9),
+    inset -1px -1px 0 rgba(50,68,92,.45) !important;
+}
+
+/* Native XP title bar */
+.titlebar {
+  min-height: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid #315a84;
+  background: linear-gradient(to bottom,
+    var(--qip-blue-top) 0%,
+    #527faa 15%,
+    var(--qip-blue-mid) 56%,
+    #6a9fc9 78%,
+    var(--qip-blue-bottom) 100%) !important;
+  font: bold 11px/24px var(--qip-font) !important;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.55);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.4);
+}
+
+.titlebar .tleft { gap: 4px; min-width: 0; }
+.titlebar .tleft > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* System control buttons */
+.titlebar .winbtn,
+.titlebar .winbtn-close-xp,
+.toolbar .winbtn,
+.chat-window-controls .winbtn {
+  position: relative;
+  flex: 0 0 auto;
+  width: 19px !important;
+  height: 19px !important;
+  padding: 0 !important;
+  border-radius: 2px !important;
+  border: 1px solid #24416d !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  background: linear-gradient(#fbfdff, #dce7f1 48%, #adc1d7) !important;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.95),
+    inset -1px -1px 0 rgba(53,74,102,.45) !important;
+}
+.titlebar .winbtn:active,
+.toolbar .winbtn:active,
+.chat-window-controls .winbtn:active { transform: translate(1px,1px); }
+
+/* minimize glyph */
+.titlebar .winbtn:first-child::before,
+.chat-window-controls .winbtn:first-child::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  left: 5px;
+  bottom: 4px;
+  background: #18395f;
+}
+/* maximize glyph */
+.titlebar .winbtn:nth-last-child(2)::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 7px;
+  left: 4px;
+  top: 4px;
+  border: 1px solid #18395f;
+  border-top-width: 2px;
+}
+/* close buttons */
+.titlebar .winbtn-close-xp,
+.titlebar .winbtn:last-child,
+.chat-window-controls .winbtn:last-child {
+  border-color: #8a1d13 !important;
+  background: linear-gradient(#ff9b84, #ef6651 42%, #d53828 62%, #b82118) !important;
+}
+.titlebar .winbtn-close-xp::before,
+.titlebar .winbtn-close-xp::after,
+.titlebar .winbtn:last-child::before,
+.titlebar .winbtn:last-child::after,
+.chat-window-controls .winbtn:last-child::before,
+.chat-window-controls .winbtn:last-child::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  left: 4px;
+  top: 8px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(100,0,0,.35);
+}
+.titlebar .winbtn-close-xp::before,
+.titlebar .winbtn:last-child::before,
+.chat-window-controls .winbtn:last-child::before { transform: rotate(45deg); }
+.titlebar .winbtn-close-xp::after,
+.titlebar .winbtn:last-child::after,
+.chat-window-controls .winbtn:last-child::after { transform: rotate(-45deg); }
+
+/* Win32 raised/sunken controls */
+.win-btn, .bb-btn, .status-btn, .send-btn, .close-btn,
+.xstatus-caption-ok, .xstatus-caption-skip, .avatar-upload-btn {
+  border-radius: 0 !important;
+  border: 1px solid var(--qip-border-dark) !important;
+  background: linear-gradient(#fff, #e7eef7 47%, #c9d8e8) !important;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.95), inset -1px -1px 0 rgba(73,91,117,.25) !important;
+  color: #111 !important;
+  font-family: var(--qip-font) !important;
+}
+.win-btn:active, .bb-btn:active, .status-btn:active, .send-btn:active, .close-btn:active,
+.xstatus-caption-ok:active, .xstatus-caption-skip:active, .avatar-upload-btn:active {
+  background: linear-gradient(#c6d5e5, #edf3f9) !important;
+  box-shadow: inset 1px 1px 1px rgba(0,0,0,.32) !important;
+}
+
+/* Tool strips */
+.toolbar, .chat-toolbar, .bottombar, .chat-bottom-row {
+  background: var(--qip-face) !important;
+  border-top: 1px solid var(--qip-highlight) !important;
+  border-bottom: 1px solid var(--qip-border-soft) !important;
+  box-shadow: none !important;
+}
+.tb-icon { border-radius: 0 !important; }
+.tb-icon:hover, .tb-icon.active {
+  background: #fff4c1 !important;
+  border: 1px solid #c6a95b !important;
+}
+.tb-icon:active { box-shadow: inset 1px 1px 0 #8a7950; }
+
+/* Chat window top: native tab control */
+.chat-window { padding: 3px !important; }
+.chat-window::before { display: none !important; }
+.chat-tab-row-wrap {
+  flex: 0 0 auto;
+  align-items: flex-end !important;
+  min-height: 38px;
+  padding: 2px 2px 0;
+  background: linear-gradient(#6f9dcc, #527fae) !important;
+  border-top: 1px solid rgba(255,255,255,.75) !important;
+  border-bottom: 1px solid #536f96 !important;
+}
+.chat-tab-row {
+  align-items: flex-end;
+  padding: 0 !important;
+  gap: 1px !important;
+  background: transparent !important;
+}
+.chat-tab {
+  min-height: 34px !important;
+  padding: 2px 7px 3px !important;
+  border-radius: 0 !important;
+  border-top: 1px solid #fff !important;
+  border-left: 1px solid #fff !important;
+  border-right: 1px solid #65788f !important;
+  border-bottom: 1px solid #65788f !important;
+  background: linear-gradient(#eef3f8, #d7dfe8 46%, #bdc9d7) !important;
+  box-shadow: inset -1px -1px 0 rgba(55,76,103,.25) !important;
+  color: #4a6488 !important;
+}
+.chat-tab.active-tab {
+  margin-bottom: -1px;
+  padding-top: 1px !important;
+  border-top: 3px solid var(--qip-tab-accent) !important;
+  border-left-color: #687b92 !important;
+  border-right-color: #687b92 !important;
+  border-bottom-color: var(--qip-face-light) !important;
+  background: var(--qip-face-light) !important;
+  color: #163e72 !important;
+  box-shadow: inset 1px 0 0 #fff !important;
+}
+.chat-window-controls {
+  align-self: stretch;
+  align-items: center !important;
+  padding: 2px 3px 3px 4px !important;
+  gap: 2px !important;
+}
+
+/* Classic panel boundaries */
+.chat-info-bar {
+  padding: 4px 6px !important;
+  background: var(--qip-face-light) !important;
+  border-top: 1px solid #fff !important;
+  border-bottom: 1px solid #7f9db9 !important;
+}
+.chat-body {
+  background: var(--qip-content) !important;
+  border: 1px solid #7f9db9 !important;
+  box-shadow: inset 1px 1px 0 rgba(95,112,137,.22) !important;
+}
+.chat-input-row {
+  border: 1px solid #7f9db9 !important;
+  box-shadow: inset 1px 1px 0 rgba(95,112,137,.22) !important;
+}
+.chat-input-row textarea { outline: none !important; }
+
+/* Avatars as old image controls */
+.qip-logo.has-avatar,
+.chat-info-bar .qip-logo-lg,
+.chat-bottom-row .qip-logo-sm,
+.avatar-picker-grid img,
+.avatar-viewer-box img {
+  border-radius: 0 !important;
+}
+.chat-info-bar .qip-logo-lg,
+.chat-bottom-row .qip-logo-sm {
+  background: #fff !important;
+  border-top: 1px solid #666 !important;
+  border-left: 1px solid #666 !important;
+  border-right: 1px solid #fff !important;
+  border-bottom: 1px solid #fff !important;
+  box-shadow: inset 1px 1px 0 #aaa !important;
+}
+.chat-info-bar .qip-logo-lg img,
+.chat-bottom-row .qip-logo-sm img,
+.qip-logo.has-avatar img { border-radius: 0 !important; }
+.avatar-picker-grid img {
+  border: 1px solid transparent !important;
+  padding: 1px;
+}
+.avatar-picker-grid img:hover {
+  outline: none !important;
+  background: #fff4c1 !important;
+  border-color: #c6a95b !important;
+}
+
+/* Compact native lists and menus */
+.group-header, .contact, .status-menu-item { border-radius: 0 !important; }
+.contact:hover, .contact.active { background: var(--qip-selection) !important; }
+.status-menu-item { padding: 4px 7px !important; font-size: 11px !important; }
+.status-menu-item:hover { background: #316ac5 !important; color: #fff !important; }
+
+/* Dialog content */
+.xstatus-picker, .avatar-picker-grid, .status-menu { border-top: 1px solid #7f9db9; }
+.xstatus-picker img { border-radius: 0 !important; }
+.xstatus-picker img:hover { background: #fff4c1 !important; outline: 1px solid #c6a95b; }
+.xstatus-custom-badge { border-radius: 0 !important; }
+
+/* Old-school scrollbars (Chromium/WebView) */
+::-webkit-scrollbar { width: 16px; height: 16px; }
+::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#f2f2f2 0 25%, #dcdcdc 0 50%) 0/2px 2px;
+  border-left: 1px solid #fff;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 24px;
+  background: linear-gradient(90deg, #dce7f2, #afc3da) !important;
+  border: 1px solid #607b9d !important;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #8799ad;
+}
+::-webkit-scrollbar-button {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(#f8fbff, #b8c9dc);
+  border: 1px solid #607b9d;
+}
+::-webkit-scrollbar-corner { background: var(--qip-face); }
+
+/* No modern motion */
+*, *::before, *::after { transition-duration: 0s !important; animation-timing-function: steps(1,end); }
+
+@media (max-width: 700px) {
+  .chat-window, .qip-window, .login-window {
+    border-radius: 0 !important;
+  }
+  .chat-window { padding: 3px !important; }
+}
+
+/* =========================================================
+   QIP UI ENGINE v2 — pixel-density pass for chat window
+   ========================================================= */
+
+/* Keep the client area mechanically framed, without a wide blue gutter. */
+.chat-window {
+  overflow: hidden !important;
+}
+
+/* More compact peer information panel. */
+.chat-info-bar {
+  min-height: 58px !important;
+  padding: 3px 5px !important;
+  gap: 6px !important;
+  line-height: 14px !important;
+}
+.chat-info-bar .qip-logo-lg {
+  width: 50px !important;
+  height: 50px !important;
+  padding: 1px !important;
+}
+.chat-info-bar .qip-logo-lg img {
+  width: 46px !important;
+  height: 46px !important;
+}
+.chat-info-bar .info-lines {
+  line-height: 14px !important;
+}
+.chat-info-bar .info-lines,
+.chat-info-bar .info-lines b {
+  font-size: 11px !important;
+}
+.info-lines-right {
+  font-size: 10px !important;
+  line-height: 14px !important;
+}
+
+/* QIP history is a dense text log, not a feed of cards. */
+.chat-body {
+  padding: 3px 7px !important;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  background: #f7fafc !important;
+  scrollbar-width: thin;
+  scrollbar-color: #a9bed5 #e9e9e9;
+}
+.msg {
+  margin: 0 0 2px 0 !important;
+  padding: 0 !important;
+  line-height: 15px !important;
+}
+.msg .who {
+  font-size: 12px !important;
+  line-height: 15px !important;
+}
+.msg .time,
+.txt-line .line-time {
+  font-size: 10px !important;
+  color: #929292 !important;
+  margin-left: 4px !important;
+}
+.msg .txt,
+.txt-line {
+  font-size: 12px !important;
+  line-height: 15px !important;
+}
+.msg-bubble-ico {
+  width: 13px !important;
+  height: 13px !important;
+  margin-right: 3px !important;
+}
+.msg-quote {
+  margin: 2px 0 !important;
+  padding: 1px 6px !important;
+  border-left-width: 3px !important;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+  line-height: 14px !important;
+}
+.msg-emoji {
+  max-width: 32px !important;
+  max-height: 32px !important;
+}
+
+/* Compact 22px Win32 toolbar. */
+.chat-toolbar {
+  min-height: 23px !important;
+  height: 23px !important;
+  padding: 1px 4px !important;
+  gap: 1px !important;
+}
+.chat-toolbar .tb-icon {
+  width: 20px !important;
+  height: 20px !important;
+  padding: 1px !important;
+}
+.tb-char-counter {
+  height: 20px !important;
+  min-width: 24px !important;
+  padding: 1px 3px !important;
+  border-radius: 0 !important;
+  line-height: 16px !important;
+}
+
+/* Native multiline edit control. */
+.chat-input-row {
+  margin: 0 !important;
+  border-top: 1px solid #6f7f91 !important;
+  border-left: 1px solid #6f7f91 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #b7b7b7,
+    inset -1px -1px 0 #f8f8f8 !important;
+}
+.chat-input-row textarea {
+  height: 76px !important;
+  padding: 4px 5px !important;
+  font: 12px/15px Tahoma, Arial, sans-serif !important;
+  color: #111 !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.chat-input-row textarea::placeholder {
+  font: 12px/15px Tahoma, Arial, sans-serif !important;
+  color: #8b8b8b !important;
+}
+
+/* Compact command bar at the bottom. */
+.chat-bottom-row {
+  min-height: 48px !important;
+  height: 48px !important;
+  padding: 3px 5px !important;
+  gap: 5px !important;
+}
+.chat-bottom-row .qip-logo-sm {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 1px !important;
+  transform: translateY(-1px);
+}
+.chat-bottom-row .qip-logo-sm img {
+  width: 34px !important;
+  height: 34px !important;
+}
+.my-nick {
+  font-size: 12px !important;
+  line-height: 14px !important;
+}
+.my-status,
+.my-xstatus,
+.chat-bottom-row .status-text,
+.chat-bottom-row .xstatus-text {
+  font-size: 10px !important;
+  line-height: 12px !important;
+}
+.send-btn {
+  min-width: 72px !important;
+  height: 30px !important;
+  padding: 2px 10px !important;
+  border-radius: 0 !important;
+  font: bold 11px/24px Tahoma, Arial, sans-serif !important;
+}
+
+/* Full XP scrollbar with explicit arrow buttons in Chromium/WebView. */
+.chat-body::-webkit-scrollbar,
+.emoji-picker::-webkit-scrollbar,
+.avatar-picker-grid::-webkit-scrollbar {
+  width: 16px !important;
+  height: 16px !important;
+}
+.chat-body::-webkit-scrollbar-track,
+.emoji-picker::-webkit-scrollbar-track,
+.avatar-picker-grid::-webkit-scrollbar-track {
+  background-color: #e6e6e6 !important;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,.55) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,.55) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(190,190,190,.35) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(190,190,190,.35) 75%) !important;
+  background-size: 2px 2px !important;
+  border-left: 1px solid #ffffff !important;
+}
+.chat-body::-webkit-scrollbar-thumb,
+.emoji-picker::-webkit-scrollbar-thumb,
+.avatar-picker-grid::-webkit-scrollbar-thumb {
+  min-height: 28px !important;
+  background: linear-gradient(to right, #eaf2fb 0%, #c6d8ea 42%, #a9bfd8 100%) !important;
+  border: 1px solid #5c7696 !important;
+  border-radius: 0 !important;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #7f94aa !important;
+}
+.chat-body::-webkit-scrollbar-button,
+.emoji-picker::-webkit-scrollbar-button,
+.avatar-picker-grid::-webkit-scrollbar-button {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 1px solid #5c7696 !important;
+  background-color: #d7e4f0 !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #8194a8 !important;
+}
+.chat-body::-webkit-scrollbar-button:vertical:decrement,
+.emoji-picker::-webkit-scrollbar-button:vertical:decrement,
+.avatar-picker-grid::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M1 6L4 2l3 4z' fill='%231b3657'/%3E%3C/svg%3E") !important;
+}
+.chat-body::-webkit-scrollbar-button:vertical:increment,
+.emoji-picker::-webkit-scrollbar-button:vertical:increment,
+.avatar-picker-grid::-webkit-scrollbar-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M1 2l3 4 3-4z' fill='%231b3657'/%3E%3C/svg%3E") !important;
+}
+
+@media (max-width: 700px) {
+  .chat-info-bar { min-height: 58px !important; }
+  .chat-input-row textarea { height: 76px !important; }
+  .chat-bottom-row { height: 48px !important; }
+}
+
+/* =========================================================
+   QIP UI ENGINE v3 — authenticity pass
+   Send button, edit control, tabs, compact info panel, XP bars
+   ========================================================= */
+
+/* Sharper, more mechanical Win32 frame. */
+.chat-window {
+  border: 1px solid #08396e !important;
+  box-shadow:
+    0 0 0 1px #2d6ca4,
+    0 0 0 2px #a7cbe7,
+    0 0 0 3px #174f87,
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #5f7185 !important;
+}
+
+/* Authentic rectangular QIP tab control. */
+.chat-tab-row-wrap {
+  min-height: 36px !important;
+  padding: 2px 2px 0 !important;
+  background: linear-gradient(to bottom, #6f9bc8 0%, #5d8dbb 55%, #4f78a3 100%) !important;
+  border-bottom: 1px solid #526a85 !important;
+}
+.chat-tab-row { gap: 0 !important; }
+.chat-tab {
+  min-height: 32px !important;
+  padding: 2px 8px 2px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-top: 1px solid #ffffff !important;
+  border-left: 1px solid #ffffff !important;
+  border-right: 1px solid #6d7f94 !important;
+  border-bottom: 1px solid #6d7f94 !important;
+  background: linear-gradient(to bottom, #eef2f6 0%, #d8dfe7 50%, #bdc8d4 100%) !important;
+  box-shadow: inset -1px -1px 0 rgba(70,84,102,.22) !important;
+}
+.chat-tab + .chat-tab { margin-left: -1px !important; }
+.chat-tab.active-tab {
+  z-index: 4 !important;
+  margin-bottom: -1px !important;
+  padding-top: 1px !important;
+  border-top: 3px solid #f5b52e !important;
+  border-left: 1px solid #6d7f94 !important;
+  border-right: 1px solid #6d7f94 !important;
+  border-bottom: 1px solid #f4f1e8 !important;
+  background: #f4f1e8 !important;
+  color: #153b69 !important;
+  box-shadow: inset 1px 0 0 #ffffff !important;
+}
+.chat-tab .tab-top-row { gap: 3px !important; }
+.chat-tab .tab-name { font: bold 11px/13px Tahoma, Arial, sans-serif !important; }
+.chat-tab .tab-status-text { font: 9px/10px Tahoma, Arial, sans-serif !important; color: #777 !important; }
+
+/* Smaller peer card: old compact QIP information panel. */
+.chat-info-bar {
+  min-height: 54px !important;
+  height: 54px !important;
+  padding: 2px 5px !important;
+  gap: 5px !important;
+  background: #f4f1e8 !important;
+}
+.chat-info-bar .qip-logo-lg {
+  width: 48px !important;
+  height: 48px !important;
+  padding: 1px !important;
+}
+.chat-info-bar .qip-logo-lg img {
+  width: 44px !important;
+  height: 44px !important;
+}
+.chat-info-bar .info-lines,
+.chat-info-bar .info-lines b {
+  font-size: 11px !important;
+  line-height: 13px !important;
+}
+.info-lines-right {
+  font-size: 10px !important;
+  line-height: 13px !important;
+}
+
+/* Message log: slightly warmer QIP surface and quieter timestamps. */
+.chat-body {
+  background: #f6f7f4 !important;
+  padding: 3px 6px !important;
+  border-top-color: #6f839d !important;
+  border-left-color: #6f839d !important;
+}
+.msg { margin-bottom: 1px !important; }
+.msg .time,
+.txt-line .line-time {
+  color: #969696 !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+}
+
+/* 22px old-QIP toolbar with hard separators. */
+.chat-toolbar {
+  height: 22px !important;
+  min-height: 22px !important;
+  padding: 0 3px !important;
+  border-top: 1px solid #ffffff !important;
+  border-bottom: 1px solid #aca899 !important;
+}
+.chat-toolbar .tb-icon {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 0 !important;
+}
+
+/* True Win32 multiline edit frame: double sunken edge. */
+.chat-input-row {
+  position: relative !important;
+  margin: 0 1px !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  background: #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 #dfdfdf !important;
+}
+.chat-input-row::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border-top: 1px solid #d4d0c8;
+  border-left: 1px solid #d4d0c8;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  z-index: 1;
+}
+.chat-input-row textarea {
+  position: relative !important;
+  z-index: 2 !important;
+  height: 72px !important;
+  padding: 3px 4px !important;
+  caret-color: #000 !important;
+}
+
+/* Classic XP command button. Removes the modern web-button feel. */
+.send-btn {
+  position: relative !important;
+  min-width: 78px !important;
+  height: 29px !important;
+  padding: 0 10px !important;
+  border-radius: 0 !important;
+  border: 1px solid #003c74 !important;
+  background: linear-gradient(to bottom,
+    #ffffff 0%,
+    #f6f8fb 40%,
+    #dbe7f4 58%,
+    #c4d6e9 100%) !important;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #7f9db9 !important;
+  color: #111 !important;
+  font: bold 11px/27px Tahoma, Arial, sans-serif !important;
+  text-shadow: none !important;
+}
+.send-btn:hover {
+  border-color: #0054a6 !important;
+  background: linear-gradient(to bottom, #ffffff, #e7f0fa 52%, #c8dcef) !important;
+}
+.send-btn:active {
+  transform: translate(1px, 1px) !important;
+  background: linear-gradient(to bottom, #c1d1e1, #edf4fb) !important;
+  box-shadow: inset 1px 1px 1px rgba(0,0,0,.32) !important;
+}
+.send-btn:focus-visible {
+  outline: 1px dotted #111 !important;
+  outline-offset: -4px !important;
+}
+
+/* Bottom user strip: less profile-card, more command bar. */
+.chat-bottom-row {
+  min-height: 46px !important;
+  height: 46px !important;
+  padding: 2px 4px !important;
+  border-top: 1px solid #ffffff !important;
+  background: #ece9d8 !important;
+}
+.chat-bottom-row .qip-logo-sm {
+  width: 36px !important;
+  height: 36px !important;
+  transform: translateY(-1px) !important;
+}
+.chat-bottom-row .qip-logo-sm img {
+  width: 32px !important;
+  height: 32px !important;
+}
+.my-nick { font-size: 11px !important; line-height: 13px !important; }
+.my-status,
+.my-xstatus,
+.chat-bottom-row .status-text,
+.chat-bottom-row .xstatus-text {
+  font-size: 9px !important;
+  line-height: 11px !important;
+}
+
+/* Better XP scrollbars where Chromium allows styling. */
+.chat-body::-webkit-scrollbar { width: 16px !important; }
+.chat-body::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#eeeeee 0 25%, #d9d9d9 0 50%) 0/2px 2px !important;
+  border-left: 1px solid #ffffff !important;
+}
+.chat-body::-webkit-scrollbar-thumb {
+  min-height: 32px !important;
+  background: linear-gradient(to right, #eef5fb 0%, #cadbea 44%, #a8bed4 100%) !important;
+  border: 1px solid #5b7594 !important;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #7d91a6 !important;
+}
+.chat-body::-webkit-scrollbar-button {
+  width: 16px !important;
+  height: 16px !important;
+  background-color: #d7e4f0 !important;
+  border: 1px solid #5b7594 !important;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #8194a8 !important;
+}
+
+@media (max-width: 700px) {
+  .chat-info-bar { min-height: 54px !important; height: 54px !important; }
+  .chat-input-row textarea { height: 72px !important; }
+  .chat-bottom-row { min-height: 46px !important; height: 46px !important; }
+}
+
+/* =========================================================
+   QIP UI Engine v4 — final chat-window geometry pass
+   ========================================================= */
+
+/* Tab strip: make tabs feel mechanically attached to the frame. */
+.chat-tab-row-wrap {
+  min-height: 34px !important;
+  padding: 1px 1px 0 !important;
+  border-top: 1px solid #d9ecfb !important;
+  border-left: 1px solid #35658f !important;
+  border-right: 1px solid #35658f !important;
+  background: linear-gradient(to bottom, #6f9fcd 0%, #5f90be 52%, #507aa5 100%) !important;
+}
+.chat-tab-row {
+  min-height: 33px !important;
+  align-items: flex-end !important;
+}
+.chat-tab {
+  min-height: 31px !important;
+  height: 31px !important;
+  padding: 1px 7px 2px !important;
+  border-top-color: #fdfdfd !important;
+  border-left-color: #fdfdfd !important;
+  border-right-color: #687d95 !important;
+  border-bottom-color: #526982 !important;
+}
+.chat-tab.active-tab {
+  height: 32px !important;
+  margin-bottom: -1px !important;
+  padding-top: 0 !important;
+  border-top: 2px solid #f4b52c !important;
+  border-left: 1px solid #65798f !important;
+  border-right: 1px solid #65798f !important;
+  border-bottom: 1px solid #f4f1e8 !important;
+  background: #f4f1e8 !important;
+}
+.chat-tab .tab-top-row { line-height: 12px !important; }
+.chat-tab .tab-status-text { margin-top: -1px !important; }
+
+/* Window controls sit flush in the title strip. */
+.chat-window-controls {
+  padding: 1px 3px 2px 3px !important;
+  border-left: 1px solid rgba(255,255,255,.55) !important;
+}
+.chat-window-controls .winbtn {
+  width: 19px !important;
+  height: 19px !important;
+}
+
+/* Peer panel: tighter and closer to the original QIP proportions. */
+.chat-info-bar {
+  min-height: 50px !important;
+  height: 50px !important;
+  padding: 1px 5px !important;
+  gap: 5px !important;
+  overflow: hidden !important;
+}
+.chat-info-bar .qip-logo-lg {
+  width: 46px !important;
+  height: 46px !important;
+}
+.chat-info-bar .qip-logo-lg img {
+  width: 42px !important;
+  height: 42px !important;
+}
+.chat-info-bar .info-lines,
+.chat-info-bar .info-lines b {
+  font-size: 10px !important;
+  line-height: 12px !important;
+}
+.info-lines-right {
+  font-size: 9px !important;
+  line-height: 12px !important;
+}
+
+/* Message log: tighter Win32 text log rather than web message feed. */
+.chat-body {
+  padding: 2px 5px !important;
+  font-size: 12px !important;
+  line-height: 14px !important;
+  background: #f7f7f3 !important;
+}
+.msg {
+  margin: 0 0 0 0 !important;
+  padding: 0 !important;
+}
+.msg .who {
+  font-size: 11px !important;
+  line-height: 14px !important;
+}
+.msg .time,
+.txt-line .line-time {
+  position: relative !important;
+  top: -1px !important;
+  margin-left: 4px !important;
+  font-size: 9px !important;
+  color: #999 !important;
+}
+.msg .txt,
+.txt-line {
+  font-size: 12px !important;
+  line-height: 14px !important;
+}
+.msg-bubble-ico {
+  width: 12px !important;
+  height: 12px !important;
+  margin-right: 3px !important;
+}
+.msg-quote {
+  margin: 1px 0 !important;
+  padding: 1px 4px !important;
+  line-height: 13px !important;
+}
+
+/* Toolbar: strict 21px Win32 strip. */
+.chat-toolbar {
+  height: 21px !important;
+  min-height: 21px !important;
+  padding: 0 2px !important;
+}
+.chat-toolbar .tb-icon {
+  width: 19px !important;
+  height: 19px !important;
+}
+
+/* Multiline edit control: stronger 3D sunken frame. */
+.chat-input-row {
+  margin: 0 2px !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset 2px 2px 0 #d4d0c8,
+    inset -1px -1px 0 #ffffff !important;
+}
+.chat-input-row::before { display: none !important; }
+.chat-input-row textarea {
+  height: 68px !important;
+  padding: 3px 4px !important;
+  font: 12px/15px Tahoma, Arial, sans-serif !important;
+  background: #fff !important;
+}
+.chat-input-row textarea::placeholder {
+  font: 12px/15px Tahoma, Arial, sans-serif !important;
+  color: #8a8a8a !important;
+}
+
+/* Bottom command area: compact and mechanically aligned. */
+.chat-bottom-row {
+  min-height: 44px !important;
+  height: 44px !important;
+  padding: 2px 4px !important;
+  gap: 5px !important;
+}
+.chat-bottom-row .qip-logo-sm {
+  width: 34px !important;
+  height: 34px !important;
+  transform: translateY(-1px) !important;
+}
+.chat-bottom-row .qip-logo-sm img {
+  width: 30px !important;
+  height: 30px !important;
+}
+.my-nick {
+  font: bold 11px/12px Tahoma, Arial, sans-serif !important;
+}
+.my-status,
+.my-xstatus,
+.chat-bottom-row .status-text,
+.chat-bottom-row .xstatus-text {
+  font: 9px/10px Tahoma, Arial, sans-serif !important;
+}
+
+/* Send button: closer to native XP PushButton proportions. */
+.send-btn {
+  min-width: 74px !important;
+  height: 27px !important;
+  padding: 0 8px !important;
+  border: 1px solid #003c74 !important;
+  background: linear-gradient(to bottom,
+    #ffffff 0%,
+    #f7f9fc 36%,
+    #e2ebf5 50%,
+    #c3d5e7 100%) !important;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #7f9db9,
+    0 0 0 1px rgba(255,255,255,.25) !important;
+  font: bold 11px/25px Tahoma, Arial, sans-serif !important;
+}
+.send-btn:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #eef5fb 48%, #c7ddef 100%) !important;
+}
+
+/* Chromium XP scrollbar pass. */
+.chat-body::-webkit-scrollbar { width: 15px !important; }
+.chat-body::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#eeeeee 0 25%, #d9d9d9 0 50%) 0 / 2px 2px !important;
+  border-left: 1px solid #c7c7c7 !important;
+}
+.chat-body::-webkit-scrollbar-thumb {
+  min-height: 30px !important;
+  background: linear-gradient(to right, #f5f9fc 0%, #d7e3ee 45%, #aabdd0 100%) !important;
+  border: 1px solid #5b718c !important;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #7f91a5 !important;
+}
+.chat-body::-webkit-scrollbar-button {
+  display: block !important;
+  width: 15px !important;
+  height: 15px !important;
+  background: linear-gradient(#f7fbff, #c4d5e5) !important;
+  border: 1px solid #5b718c !important;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #8294a7 !important;
+}
+
+@media (max-width: 700px) {
+  .chat-info-bar { min-height: 50px !important; height: 50px !important; }
+  .chat-input-row textarea { height: 68px !important; }
+  .chat-bottom-row { min-height: 44px !important; height: 44px !important; }
+}
+
+
+/* =========================================================
+   QIP UI Engine v5 — hard Win32 joins and compact chrome
+   ========================================================= */
+
+/* Remove remaining visual gaps: every section joins by 1px Win32 edges. */
+.chat-window {
+  gap: 0 !important;
+}
+.chat-tab-row-wrap,
+.chat-info-bar,
+.chat-body,
+.chat-toolbar,
+.chat-input-row,
+.chat-bottom-row {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.chat-tab-row-wrap {
+  border-bottom: 0 !important;
+}
+.chat-info-bar {
+  border-top: 1px solid #ffffff !important;
+  border-bottom: 1px solid #4f769a !important;
+}
+
+/* Peer information panel: strict compact QIP proportions. */
+.chat-info-bar {
+  min-height: 44px !important;
+  height: 44px !important;
+  padding: 1px 4px !important;
+  gap: 4px !important;
+}
+.chat-info-bar .qip-logo-lg {
+  width: 42px !important;
+  height: 42px !important;
+  padding: 2px !important;
+  background: #d4d0c8 !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 #f4f1e8 !important;
+}
+.chat-info-bar .qip-logo-lg img {
+  width: 36px !important;
+  height: 36px !important;
+  display: block !important;
+  object-fit: cover !important;
+  border: 0 !important;
+}
+.chat-info-bar .info-lines,
+.chat-info-bar .info-lines b {
+  font-size: 10px !important;
+  line-height: 11px !important;
+}
+.info-lines-right {
+  font-size: 9px !important;
+  line-height: 11px !important;
+}
+
+/* Message history: nearly flush Win32 client area. */
+.chat-body {
+  padding: 1px 3px !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 #f4f1e8 !important;
+}
+.msg .who {
+  line-height: 13px !important;
+}
+.msg .txt,
+.txt-line {
+  line-height: 13px !important;
+}
+.msg .time,
+.txt-line .line-time {
+  top: -1px !important;
+  margin-left: 3px !important;
+  font-size: 9px !important;
+  color: #a0a0a0 !important;
+}
+
+/* Toolbar is attached directly to history and input. */
+.chat-toolbar {
+  height: 20px !important;
+  min-height: 20px !important;
+  padding: 0 1px !important;
+  border-top: 1px solid #ffffff !important;
+  border-bottom: 1px solid #808080 !important;
+}
+.chat-toolbar .tb-icon {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Lower textarea: classic 2-stage sunken Win32 edit frame. */
+.chat-input-row {
+  margin: 0 2px !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  background: #d4d0c8 !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset 2px 2px 0 #ffffff,
+    inset -1px -1px 0 #f4f1e8 !important;
+}
+.chat-input-row textarea {
+  height: 62px !important;
+  margin: 1px !important;
+  padding: 2px 3px !important;
+  border: 0 !important;
+  background: #ffffff !important;
+  font: 12px/14px Tahoma, Arial, sans-serif !important;
+}
+
+/* Bottom command bar: less profile-card, more native command strip. */
+.chat-bottom-row {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 1px 3px !important;
+  gap: 4px !important;
+  border-top: 1px solid #ffffff !important;
+}
+.chat-bottom-row .qip-logo-sm {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 2px !important;
+  transform: translateY(-1px) !important;
+  background: #d4d0c8 !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 #f4f1e8 !important;
+}
+.chat-bottom-row .qip-logo-sm img {
+  width: 26px !important;
+  height: 26px !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+.send-btn {
+  min-width: 68px !important;
+  width: 68px !important;
+  height: 30px !important;
+  padding: 0 5px !important;
+  font: bold 11px/28px Tahoma, Arial, sans-serif !important;
+  border-radius: 0 !important;
+}
+.send-btn:active {
+  padding-top: 1px !important;
+  padding-left: 6px !important;
+}
+
+/* Make tabs fully square and remove final web-like softness. */
+.chat-tab {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.chat-tab.active-tab {
+  border-top-width: 2px !important;
+  box-shadow: inset 1px 0 0 #ffffff !important;
+}
+
+/* Refined Chromium XP scrollbar: narrower track, harder thumb edges. */
+.chat-body::-webkit-scrollbar {
+  width: 14px !important;
+}
+.chat-body::-webkit-scrollbar-track {
+  background:
+    linear-gradient(45deg, #d9d9d9 25%, transparent 25%) 0 0/2px 2px,
+    linear-gradient(45deg, transparent 75%, #d9d9d9 75%) 0 0/2px 2px,
+    #eeeeee !important;
+  border-left: 1px solid #ffffff !important;
+}
+.chat-body::-webkit-scrollbar-thumb {
+  min-height: 28px !important;
+  border: 1px solid #486a8b !important;
+  border-radius: 0 !important;
+  background: linear-gradient(to right,
+    #f8fbfd 0%,
+    #dce7f1 38%,
+    #b4c8da 70%,
+    #9fb6cb 100%) !important;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #6f859b !important;
+}
+.chat-body::-webkit-scrollbar-button {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .chat-info-bar {
+    min-height: 44px !important;
+    height: 44px !important;
+  }
+  .chat-input-row textarea {
+    height: 62px !important;
+  }
+  .chat-bottom-row {
+    min-height: 40px !important;
+    height: 40px !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v6 — native attention and message behavior
+   ========================================================= */
+
+.chat-tab {
+  position: relative;
+}
+
+.chat-tab.unread-tab {
+  animation: qip-tab-attention 1.05s steps(1, end) infinite;
+}
+
+.chat-tab.unread-tab .tab-name {
+  color: #9b1717 !important;
+}
+
+.tab-unread-count {
+  min-width: 14px;
+  height: 13px;
+  padding: 0 3px;
+  margin-left: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #d32f22;
+  border-top: 1px solid #ffb2a9;
+  border-left: 1px solid #ffb2a9;
+  border-right: 1px solid #7e100b;
+  border-bottom: 1px solid #7e100b;
+  font: bold 9px/11px Tahoma, Arial, sans-serif;
+}
+
+@keyframes qip-tab-attention {
+  0%, 49% {
+    background: #f4f1e8;
+    border-top-color: #f4a719;
+  }
+  50%, 100% {
+    background: #ffd45c;
+    border-top-color: #c7481d;
+  }
+}
+
+.qip-attention .chat-window {
+  box-shadow:
+    0 0 0 1px #f4a719,
+    0 0 0 2px #153f70,
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #62758a !important;
+}
+
+.xp-popup-host {
+  position: fixed;
+  right: max(8px, env(safe-area-inset-right));
+  bottom: max(8px, env(safe-area-inset-bottom));
+  width: min(280px, calc(100vw - 16px));
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.xp-message-popup {
+  width: 100%;
+  padding: 0;
+  border: 1px solid #0a246a;
+  border-radius: 0;
+  background: #ffffe1;
+  color: #111111;
+  text-align: left;
+  font-family: Tahoma, Arial, sans-serif;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #5f7185,
+    2px 2px 4px rgba(0,0,0,.35);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .15s linear, transform .15s linear;
+  pointer-events: auto;
+}
+
+.xp-message-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xp-popup-titlebar {
+  height: 21px;
+  padding: 0 3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ffffff;
+  background: linear-gradient(to bottom, #6fa2d2 0%, #477cad 50%, #2f6598 100%);
+  border-bottom: 1px solid #163e69;
+  font: bold 10px/20px Tahoma, Arial, sans-serif;
+}
+
+.xp-popup-appicon {
+  color: #8dd53f;
+  text-shadow: 1px 1px 0 #245d16;
+}
+
+.xp-popup-close {
+  width: 15px;
+  height: 15px;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: linear-gradient(#ff9a82, #c92f24);
+  border: 1px solid #7a140c;
+  font: bold 11px/13px Tahoma, Arial, sans-serif;
+}
+
+.xp-popup-body {
+  min-height: 47px;
+  padding: 6px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #ffffe1;
+  border-top: 1px solid #ffffff;
+}
+
+.xp-popup-body strong {
+  color: #1f4f91;
+  font-size: 11px;
+}
+
+.xp-popup-body span {
+  color: #222222;
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.new-messages-button {
+  position: absolute;
+  right: 20px;
+  bottom: 108px;
+  z-index: 25;
+  display: none;
+  height: 23px;
+  padding: 0 8px;
+  color: #173a62;
+  background: linear-gradient(#ffffff, #d4e2f1);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  box-shadow: 1px 1px 2px rgba(0,0,0,.25);
+  font: bold 10px/21px Tahoma, Arial, sans-serif;
+}
+
+.new-messages-button.show {
+  display: block;
+}
+
+@media (max-width: 700px) {
+  .new-messages-button {
+    right: 19px;
+    bottom: 104px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v7 — mobile overlay hotfix
+   The “new messages” control must never participate in the
+   fullscreen overlay layout or expose the contact list behind it.
+   ========================================================= */
+
+.chat-overlay {
+  z-index: 500 !important;
+}
+
+.chat-overlay.open {
+  display: flex !important;
+}
+
+.chat-window {
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+}
+
+.new-messages-button {
+  position: absolute !important;
+  right: 18px !important;
+  bottom: 105px !important;
+  width: auto !important;
+  max-width: 190px !important;
+  height: 22px !important;
+  padding: 0 7px !important;
+  white-space: nowrap !important;
+  font: bold 10px/20px Tahoma, Arial, sans-serif !important;
+}
+
+@media (max-width: 700px) {
+  .chat-overlay {
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    overflow: hidden !important;
+    background: #ece9d8 !important;
+  }
+
+  .chat-window {
+    position: relative !important;
+    width: 100vw !important;
+    min-width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    flex: 0 0 100vw !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .new-messages-button {
+    left: 50% !important;
+    right: auto !important;
+    bottom: 106px !important;
+    transform: translateX(-50%) !important;
+    max-width: calc(100vw - 44px) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-shadow:
+      inset 1px 1px 0 #ffffff,
+      inset -1px -1px 0 #6d8299,
+      1px 1px 2px rgba(0,0,0,.25) !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v8 — remove accidental tab-strip scrollbar
+   The silver “bolt” was the horizontal scrollbar thumb of
+   .chat-tab-row caused by overflow-x:auto.
+   Scrolling remains available, but the browser chrome is hidden.
+   ========================================================= */
+
+.chat-tab-row {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  overscroll-behavior-x: contain !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-tab-row::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.chat-tab-row::-webkit-scrollbar-track,
+.chat-tab-row::-webkit-scrollbar-thumb,
+.chat-tab-row::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Keep system buttons pinned while tabs scroll underneath. */
+.chat-window-controls {
+  position: relative !important;
+  z-index: 4 !important;
+  flex: 0 0 auto !important;
+  background: inherit !important;
+}
+
+/* Avoid a visible empty gutter between tabs and window controls. */
+.chat-tab-row-wrap {
+  column-gap: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .chat-tab-row {
+    touch-action: pan-x !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v9 — remove mobile tab/control divider
+   ========================================================= */
+
+.chat-tab-row {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.chat-window-controls {
+  margin-left: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+}
+
+.chat-window-controls::before,
+.chat-window-controls::after,
+.chat-tab-row-wrap::before,
+.chat-tab-row-wrap::after {
+  content: none !important;
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .chat-tab-row-wrap {
+    gap: 0 !important;
+    column-gap: 0 !important;
+  }
+
+  .chat-window-controls {
+    padding-left: 2px !important;
+    background: transparent !important;
+    border-left: 0 !important;
+  }
+
+  .chat-tab-row {
+    border-right: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v10 — definitive mobile tab-strip cleanup
+   The remaining silver block is browser scrollbar chrome.
+   Disable overflow chrome completely on mobile.
+   ========================================================= */
+
+.chat-tab-row {
+  scrollbar-gutter: auto !important;
+}
+
+@media (max-width: 700px) {
+  .chat-tab-row {
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    touch-action: none !important;
+  }
+
+  .chat-tab-row::-webkit-scrollbar,
+  .chat-tab-row::-webkit-scrollbar-track,
+  .chat-tab-row::-webkit-scrollbar-thumb,
+  .chat-tab-row::-webkit-scrollbar-button,
+  .chat-tab-row::-webkit-scrollbar-corner {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  .chat-tab-row-wrap {
+    overflow: hidden !important;
+  }
+
+  .chat-window-controls {
+    border-left: 0 !important;
+    margin-left: 0 !important;
+    padding-left: 2px !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v13 — actual silver-block fix
+   The circled object was the native scrollbar generated by the
+   original inline overflow-x:auto rule on .chat-tab-row.
+   That source rule is now removed in index.html.
+   ========================================================= */
+
+.chat-tab-row {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.chat-tab-row::-webkit-scrollbar,
+.chat-tab-row::-webkit-scrollbar-track,
+.chat-tab-row::-webkit-scrollbar-thumb,
+.chat-tab-row::-webkit-scrollbar-button,
+.chat-tab-row::-webkit-scrollbar-corner {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* Restore normal two-button control geometry. */
+.chat-window-controls {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 1px 3px 2px 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 2px !important;
+  background: transparent !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+}
+
+.chat-window-controls::before,
+.chat-window-controls::after {
+  content: none !important;
+  display: none !important;
+}
+
+.chat-window-controls .winbtn {
+  display: flex !important;
+}
+
+@media (max-width: 700px) {
+  .chat-tab-row-wrap {
+    position: static !important;
+    display: flex !important;
+    height: auto !important;
+    min-height: 34px !important;
+    overflow: hidden !important;
+  }
+
+  .chat-tab-row {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 33px !important;
+    right: auto !important;
+    touch-action: none !important;
+  }
+
+  .chat-window-controls {
+    position: static !important;
+    flex: 0 0 auto !important;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v14 — XP minimized-chat task strip
+   ========================================================= */
+
+.minimized-chats-bar {
+  display: none;
+  min-height: 27px;
+  height: 27px;
+  padding: 2px 3px;
+  gap: 2px;
+  align-items: stretch;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #808080;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.minimized-chats-bar.show {
+  display: flex;
+}
+
+.minimized-chats-bar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.xp-chat-task {
+  position: relative;
+  flex: 0 1 150px;
+  min-width: 74px;
+  max-width: 160px;
+  height: 22px;
+  padding: 1px 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #102d4f;
+  background: linear-gradient(to bottom, #f8fbff 0%, #dbe7f3 48%, #b8cadc 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #426483;
+  border-bottom: 1px solid #426483;
+  border-radius: 0;
+  box-shadow: inset -1px -1px 0 rgba(80,100,120,.22);
+  font: 10px/18px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.xp-chat-task:active {
+  padding-top: 2px;
+  padding-left: 6px;
+  background: linear-gradient(to bottom, #b7c9db 0%, #dce7f2 100%);
+  border-top-color: #426483;
+  border-left-color: #426483;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.xp-chat-task.has-unread {
+  animation: qip-task-flash 1.05s steps(1, end) infinite;
+  font-weight: bold;
+}
+
+@keyframes qip-task-flash {
+  0%, 49% {
+    background: linear-gradient(to bottom, #fff8c9 0%, #ffd85f 100%);
+    color: #6c2a00;
+  }
+  50%, 100% {
+    background: linear-gradient(to bottom, #f8fbff 0%, #b8cadc 100%);
+    color: #102d4f;
+  }
+}
+
+.xp-task-status {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
+}
+
+.xp-task-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xp-task-unread {
+  flex: 0 0 auto;
+  min-width: 14px;
+  height: 13px;
+  padding: 0 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #d12b1f;
+  border-top: 1px solid #ffb4aa;
+  border-left: 1px solid #ffb4aa;
+  border-right: 1px solid #77110b;
+  border-bottom: 1px solid #77110b;
+  font: bold 9px/11px Tahoma, Arial, sans-serif;
+}
+
+.xp-chat-task-all {
+  flex: 0 0 36px;
+  min-width: 36px;
+  max-width: 36px;
+  justify-content: center;
+  padding: 1px 3px;
+  font-weight: bold;
+}
+
+.xp-task-arrow {
+  font-size: 9px;
+}
+
+@media (max-width: 700px) {
+  .minimized-chats-bar {
+    min-height: 29px;
+    height: 29px;
+    padding: 3px;
+  }
+
+  .xp-chat-task {
+    flex-basis: 132px;
+    max-width: 145px;
+    height: 22px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v15 — full XP message history window
+   ========================================================= */
+
+.history-window-icon {
+  position: relative;
+}
+
+.history-book-glyph,
+.history-title-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #5b3b00;
+  background: linear-gradient(#fff3a1, #d8ad2d);
+  border-top: 1px solid #fffbd3;
+  border-left: 1px solid #fffbd3;
+  border-right: 1px solid #806000;
+  border-bottom: 1px solid #806000;
+  font: bold 9px/14px Tahoma, Arial, sans-serif;
+}
+
+.history-window-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(0,0,0,.32);
+}
+
+.history-window-overlay.open {
+  display: flex;
+}
+
+.history-window {
+  width: min(760px, calc(100vw - 24px));
+  height: min(610px, calc(100dvh - 24px));
+  display: grid;
+  grid-template-rows: 25px 24px 29px 1fr 29px;
+  overflow: hidden;
+  color: #111;
+  background: #ece9d8;
+  border: 1px solid #0a246a;
+  box-shadow:
+    0 0 0 1px #4d84b5,
+    0 0 0 2px #9fc6e5,
+    0 0 0 3px #174f87,
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #66788b,
+    3px 3px 6px rgba(0,0,0,.45);
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.history-titlebar {
+  min-height: 25px !important;
+  height: 25px !important;
+}
+
+.history-menubar {
+  display: flex;
+  align-items: center;
+  padding: 1px 3px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #aca899;
+}
+
+.history-menubar button {
+  height: 20px;
+  padding: 0 7px;
+  color: #111;
+  background: transparent;
+  border: 1px solid transparent;
+  font: 10px/18px Tahoma, Arial, sans-serif;
+}
+
+.history-menubar button:hover {
+  background: #fff4c1;
+  border-color: #c6a95b;
+}
+
+.history-record-count {
+  margin-left: auto;
+  padding-right: 5px;
+  color: #666;
+  font-size: 9px;
+}
+
+.history-filterbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 5px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #808080;
+  font-size: 10px;
+}
+
+.history-filterbar input {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  padding: 1px 4px;
+  color: #111;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #808080;
+  font: 10px/16px Tahoma, Arial, sans-serif;
+  outline: none;
+}
+
+.xp-small-button {
+  height: 21px;
+  padding: 0 8px;
+  color: #111;
+  background: linear-gradient(#ffffff, #d9e5f5);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  font: 10px/18px Tahoma, Arial, sans-serif;
+}
+
+.xp-small-button:active {
+  padding-top: 1px;
+  padding-left: 9px;
+  background: #cbd8e8;
+  border-top-color: #315c87;
+  border-left-color: #315c87;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.history-window-body {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 2px;
+  padding: 2px;
+  background: #d4d0c8;
+}
+
+.history-date-list,
+.history-record-list {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.history-date-item {
+  width: 100%;
+  height: 23px;
+  padding: 2px 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #111;
+  background: #ffffff;
+  border: 0;
+  border-bottom: 1px solid #ececec;
+  border-radius: 0;
+  font: 10px/18px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.history-date-item em {
+  margin-left: auto;
+  color: #777;
+  font-style: normal;
+  font-size: 9px;
+}
+
+.history-date-item.active {
+  color: #ffffff;
+  background: #316ac5;
+}
+
+.history-date-item.active em {
+  color: #ffffff;
+}
+
+.history-record {
+  padding: 5px 7px 6px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 10px;
+}
+
+.history-record.mine {
+  background: #f3f8ff;
+}
+
+.history-record.theirs {
+  background: #ffffff;
+}
+
+.history-record-header {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 3px;
+}
+
+.history-record-header strong {
+  color: #22569a;
+  font-size: 10px;
+}
+
+.history-record.theirs .history-record-header strong {
+  color: #9b2020;
+}
+
+.history-record-header time {
+  margin-left: auto;
+  color: #8f8f8f;
+  font-size: 9px;
+}
+
+.history-record-icon {
+  color: #718b00;
+  font-size: 10px;
+}
+
+.history-record-text {
+  color: #222;
+  line-height: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.history-empty {
+  padding: 18px;
+  color: #777;
+  font: 10px Tahoma, Arial, sans-serif;
+  text-align: center;
+}
+
+.history-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+}
+
+.history-statusbar > span {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  padding: 2px 5px;
+  color: #555;
+  background: #f3f1e8;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  font: 9px/14px Tahoma, Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  .history-window-overlay {
+    padding: 0;
+  }
+
+  .history-window {
+    width: 100vw;
+    height: 100dvh;
+    grid-template-rows: 25px 24px 32px 1fr 31px;
+    border-radius: 0;
+  }
+
+  .history-window-body {
+    grid-template-columns: 105px 1fr;
+  }
+
+  .history-filterbar {
+    padding: 4px;
+  }
+
+  .history-statusbar {
+    padding-bottom: max(3px, env(safe-area-inset-bottom));
+  }
+
+  .history-statusbar .xp-small-button {
+    padding: 0 6px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v16 — authentic quick-search control
+   ========================================================= */
+
+.chat-toolbar .tb-icon[title^="Поиск в текущем окне"] {
+  width: 20px !important;
+  height: 20px !important;
+  padding: 1px !important;
+}
+
+.chat-toolbar .tb-icon[title^="Поиск в текущем окне"] img {
+  width: 16px !important;
+  height: 16px !important;
+  display: block !important;
+  image-rendering: pixelated !important;
+}
+
+.chat-toolbar .tb-icon[title^="Поиск в текущем окне"]:hover {
+  background: #fff4c1 !important;
+  border: 1px solid #c6a95b !important;
+}
+
+.chat-toolbar .tb-icon[title^="Поиск в текущем окне"]:active {
+  padding-top: 2px !important;
+  padding-left: 2px !important;
+  background: #e8dca5 !important;
+  border-top-color: #806f31 !important;
+  border-left-color: #806f31 !important;
+  border-right-color: #ffffff !important;
+  border-bottom-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   QIP UI Engine v17 — authentic main-window bottom toolbar
+   ========================================================= */
+
+.qip-main-bottom {
+  position: relative;
+  padding: 2px 3px 3px !important;
+  background: #ece9d8 !important;
+  border-top: 1px solid #ffffff !important;
+}
+
+.qip-bottom-toolbar {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 1px 2px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #aca899;
+  border-bottom: 1px solid #aca899;
+}
+
+.qip-bottom-btn {
+  width: 22px;
+  height: 21px;
+  flex: 0 0 22px;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+}
+
+.qip-bottom-btn img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.qip-bottom-btn:hover {
+  background: #fff4c1;
+  border-color: #c6a95b;
+}
+
+.qip-bottom-btn:active,
+.qip-bottom-btn.pressed {
+  padding-top: 3px;
+  padding-left: 3px;
+  background: #ddd4a0;
+  border-top-color: #806f31;
+  border-left-color: #806f31;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.qip-bottom-separator {
+  width: 2px;
+  height: 18px;
+  margin: 0 2px;
+  border-left: 1px solid #aca899;
+  border-right: 1px solid #ffffff;
+}
+
+.qip-bottom-spacer {
+  flex: 1;
+}
+
+.qip-bottom-status-row {
+  height: 29px;
+  margin-top: 2px;
+  display: flex;
+  gap: 2px;
+}
+
+.qip-bottom-status-row .status-btn {
+  flex: 1;
+  height: 28px !important;
+  justify-content: flex-start !important;
+  padding: 0 7px !important;
+  border-radius: 0 !important;
+}
+
+.status-drop-arrow {
+  margin-left: auto;
+  color: #385270;
+  font-size: 8px;
+}
+
+.qip-bottom-status-row .xstatus-quick-btn {
+  width: 31px !important;
+  height: 28px !important;
+  border-radius: 0 !important;
+  font: 17px/25px "MS Sans Serif", Tahoma, sans-serif;
+}
+
+.qip-main-popup-menu {
+  position: absolute;
+  left: 4px;
+  bottom: 58px;
+  z-index: 8000;
+  display: none;
+  width: 220px;
+  padding: 2px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  box-shadow: 2px 2px 4px rgba(0,0,0,.35);
+}
+
+.qip-main-popup-menu.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.qip-main-popup-menu button {
+  height: 24px;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #111;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.qip-main-popup-menu button:hover {
+  color: #ffffff;
+  background: #316ac5;
+}
+
+.qip-main-popup-menu img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.qip-menu-separator {
+  height: 2px;
+  margin: 2px 3px;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+}
+
+.qip-tool-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(0,0,0,.3);
+}
+
+.qip-tool-overlay.open {
+  display: flex;
+}
+
+.qip-tool-window {
+  width: min(480px, calc(100vw - 24px));
+  max-height: min(560px, calc(100dvh - 24px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ece9d8;
+  border: 1px solid #0a246a;
+  box-shadow:
+    0 0 0 1px #4d84b5,
+    0 0 0 2px #9fc6e5,
+    0 0 0 3px #174f87,
+    3px 3px 6px rgba(0,0,0,.45);
+}
+
+.qip-tool-window .titlebar img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.qip-tool-content {
+  padding: 5px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contact-finder-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 5px;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.contact-finder-controls input {
+  height: 21px;
+  min-width: 0;
+  padding: 2px 4px;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #808080;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.contact-finder-results {
+  height: 310px;
+  overflow: auto;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.contact-finder-row {
+  width: 100%;
+  height: 25px;
+  padding: 2px 5px;
+  display: grid;
+  grid-template-columns: 16px minmax(0,1fr) auto auto;
+  align-items: center;
+  gap: 5px;
+  color: #111;
+  background: #ffffff;
+  border: 0;
+  border-bottom: 1px solid #eeeeee;
+  border-radius: 0;
+  font: 10px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.contact-finder-row:hover,
+.contact-finder-row.selected {
+  color: #ffffff;
+  background: #316ac5;
+}
+
+.contact-finder-row img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.contact-finder-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.contact-finder-id,
+.contact-finder-state {
+  color: #777;
+  font-size: 9px;
+}
+
+.contact-finder-row:hover .contact-finder-id,
+.contact-finder-row:hover .contact-finder-state,
+.contact-finder-row.selected .contact-finder-id,
+.contact-finder-row.selected .contact-finder-state {
+  color: #ffffff;
+}
+
+.qip-tool-footer {
+  min-height: 29px;
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+}
+
+.qip-tool-footer > span {
+  flex: 1;
+  min-width: 0;
+  color: #555;
+  font: 9px Tahoma, Arial, sans-serif;
+}
+
+.user-info-sheet {
+  padding: 9px;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 9px;
+  background: #f7f5ee;
+  border-bottom: 1px solid #aca899;
+}
+
+.user-info-avatar {
+  width: 68px;
+  height: 68px;
+  padding: 2px;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.user-info-avatar img {
+  width: 62px;
+  height: 62px;
+  object-fit: cover;
+}
+
+.user-info-fields {
+  font: 10px/18px Tahoma, Arial, sans-serif;
+}
+
+.qip-about-content {
+  padding: 15px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f7f5ee;
+  border-bottom: 1px solid #aca899;
+}
+
+.qip-about-content > img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+
+.qip-about-content strong {
+  color: #1c3f6e;
+  font-size: 14px;
+}
+
+.qip-about-content p {
+  margin-top: 5px;
+  color: #444;
+  font: 10px/14px Tahoma, Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  .qip-main-popup-menu {
+    position: fixed;
+    left: 4px;
+    bottom: 61px;
+    width: min(240px, calc(100vw - 8px));
+  }
+
+  .qip-tool-overlay {
+    padding: 0;
+  }
+
+  .qip-tool-window {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100dvh;
+  }
+
+  .contact-finder-window {
+    height: 100dvh;
+  }
+
+  .contact-finder-results {
+    flex: 1;
+    height: auto;
+  }
+
+  .contact-finder-controls {
+    grid-template-columns: auto 1fr;
+  }
+
+  .contact-finder-controls .xp-small-button {
+    grid-column: 2;
+    justify-self: end;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v18 — registration and editable profile
+   ========================================================= */
+
+.registration-note {
+  margin-top: 7px;
+  padding: 6px 8px;
+  color: #555;
+  background: #ffffe1;
+  border: 1px solid #aca899;
+  font: 9px/13px Tahoma, Arial, sans-serif;
+}
+
+.profile-editor-box {
+  width: min(520px, calc(100vw - 20px)) !important;
+}
+
+.profile-editor-body {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: #f7f5ee;
+  border-bottom: 1px solid #aca899;
+}
+
+.profile-avatar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.profile-edit-avatar {
+  width: 96px !important;
+  height: 96px !important;
+  padding: 3px !important;
+  background: #ffffff !important;
+  border-top: 1px solid #404040 !important;
+  border-left: 1px solid #404040 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #808080 !important;
+}
+
+.profile-edit-avatar img {
+  width: 88px !important;
+  height: 88px !important;
+  object-fit: cover !important;
+}
+
+.profile-editor-fields {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-editor-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #222;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.profile-editor-fields input,
+.profile-editor-fields textarea {
+  width: 100%;
+  padding: 3px 5px;
+  color: #111;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #808080;
+  font: 10px/15px Tahoma, Arial, sans-serif;
+  outline: none;
+}
+
+.profile-editor-fields input {
+  height: 23px;
+}
+
+.profile-editor-fields input[readonly] {
+  color: #555;
+  background: #ece9d8;
+}
+
+.profile-editor-fields textarea {
+  height: 92px;
+  resize: vertical;
+}
+
+.profile-about-counter {
+  margin-top: -5px;
+  color: #777;
+  font: 9px Tahoma, Arial, sans-serif;
+  text-align: right;
+}
+
+.profile-settings-links {
+  padding: 6px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #aca899;
+}
+
+.profile-link-button {
+  min-height: 28px;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #111;
+  background: linear-gradient(#ffffff, #dbe7f3);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  font: 10px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.profile-link-button img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.profile-editor-error {
+  min-height: 18px;
+  padding: 3px 10px;
+  color: #9e1616;
+  background: #ece9d8;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.profile-editor-footer {
+  padding: 4px 8px 7px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  background: #ece9d8;
+}
+
+.user-info-fields #selectedUserInfoAbout {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .profile-editor-box {
+    width: calc(100vw - 12px) !important;
+  }
+
+  .profile-editor-body {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .profile-edit-avatar {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .profile-edit-avatar img {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .profile-settings-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v19 — password auth and avatar-button repair
+   ========================================================= */
+
+.auth-mode-tabs {
+  height: 25px;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid #808080;
+}
+
+.auth-mode-tabs button {
+  height: 24px;
+  min-width: 94px;
+  padding: 0 10px;
+  color: #333;
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #808080;
+  border-bottom: 0;
+  border-radius: 0;
+  font: 10px/22px Tahoma, Arial, sans-serif;
+}
+
+.auth-mode-tabs button.active {
+  position: relative;
+  bottom: -1px;
+  color: #173a62;
+  background: #f7f5ee;
+  font-weight: bold;
+}
+
+.profile-avatar-column .xp-small-button {
+  width: 108px;
+  min-width: 108px;
+  height: 23px;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  line-height: 20px;
+}
+
+.profile-editor-fields input[type="password"] {
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  .auth-mode-tabs button {
+    min-width: 88px;
+  }
+
+  .profile-avatar-column .xp-small-button {
+    width: 82px;
+    min-width: 82px;
+    padding: 0 3px;
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v20 — definitive avatar picker fix
+   ========================================================= */
+
+/* Picker must always sit above profile/status dialogs. */
+.avatar-picker-overlay {
+  z-index: 9700 !important;
+}
+
+.avatar-picker-box {
+  position: relative;
+  z-index: 9701;
+}
+
+/* Make the profile avatar action reliably tappable on mobile. */
+.profile-avatar-column,
+.profile-edit-avatar,
+.profile-avatar-column .xp-small-button {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+.profile-avatar-column .xp-small-button {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+
+/* =========================================================
+   QIP UI Engine v21 — direct avatar upload + peer info card
+   ========================================================= */
+
+.profile-avatar-upload-label,
+.profile-qip-avatar-button {
+  width: 108px !important;
+  min-width: 108px !important;
+  height: 23px !important;
+  padding: 0 5px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap !important;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.profile-avatar-upload-status {
+  min-height: 24px;
+  width: 108px;
+  color: #555;
+  font: 9px/12px Tahoma, Arial, sans-serif;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.chat-peer-card {
+  min-height: 42px;
+  padding: 3px 5px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  color: #222;
+  background: linear-gradient(to bottom, #faf9f4 0%, #ece9d8 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+  cursor: pointer;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.chat-peer-card:hover {
+  background: #fffbe7;
+}
+
+.chat-peer-card-avatar {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  overflow: hidden;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.chat-peer-card-avatar img {
+  width: 28px !important;
+  height: 28px !important;
+  display: block;
+  object-fit: cover;
+}
+
+.chat-peer-card-main {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chat-peer-card-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.chat-peer-card-name-row strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #1e497d;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-peer-card-name-row span {
+  margin-left: auto;
+  color: #6d7b88;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.chat-peer-card-meta {
+  min-width: 0;
+  margin-top: 2px;
+  display: flex;
+  gap: 8px;
+  color: #777;
+  font-size: 9px;
+  line-height: 12px;
+}
+
+.chat-peer-card-meta > span:first-child {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.chat-peer-card-about {
+  min-width: 0;
+}
+
+#chatPeerCardAbout {
+  min-width: 0;
+  overflow: hidden;
+  color: #555;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#chatPeerCardAbout.empty {
+  color: #999;
+  font-style: italic;
+}
+
+.chat-peer-card-button {
+  height: 24px;
+  min-width: 44px;
+  padding: 0 7px;
+  color: #173a62;
+  background: linear-gradient(#ffffff, #d6e4f2);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  font: 10px/20px Tahoma, Arial, sans-serif;
+}
+
+.chat-peer-card-button:active {
+  padding-top: 1px;
+  background: #c7d5e4;
+  border-top-color: #315c87;
+  border-left-color: #315c87;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+@media (max-width: 700px) {
+  .profile-avatar-upload-label,
+  .profile-qip-avatar-button,
+  .profile-avatar-upload-status {
+    width: 82px !important;
+    min-width: 82px !important;
+    font-size: 8px !important;
+  }
+
+  .chat-peer-card {
+    min-height: 39px;
+    grid-template-columns: 31px minmax(0, 1fr) auto;
+    padding: 2px 4px;
+    gap: 5px;
+  }
+
+  .chat-peer-card-avatar {
+    width: 29px;
+    height: 29px;
+  }
+
+  .chat-peer-card-avatar img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .chat-peer-card-button {
+    min-width: 38px;
+    padding: 0 5px;
+    font-size: 9px;
+  }
+
+  .chat-peer-card-meta {
+    gap: 5px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v22 — compact peer information toolbar button
+   ========================================================= */
+
+/* The large v21 information card is intentionally removed. */
+.chat-peer-card {
+  display: none !important;
+}
+
+/* Keep the user-information icon consistent with other QIP buttons. */
+.chat-toolbar .tb-icon[title="Информация о собеседнике"] img {
+  width: 16px !important;
+  height: 16px !important;
+  display: block;
+  image-rendering: pixelated !important;
+}
+
+
+/* =========================================================
+   QIP UI Engine v23 — chat header metadata
+   ========================================================= */
+
+.chat-user-info .details > div {
+  line-height: 16px;
+}
+
+.chat-user-info .details b {
+  white-space: nowrap;
+}
+
+.chat-user-info .right-info {
+  line-height: 15px;
+  text-align: right;
+}
+
+#chatPeerLastSeen {
+  color: #666;
+}
+
+#chatBuildNumber {
+  font-weight: bold;
+  color: #536f8d;
+}
+
+@media (max-width: 700px) {
+  .chat-user-info .details {
+    min-width: 0;
+  }
+
+  .chat-user-info .details > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chat-user-info .right-info {
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v24 — auth hotfix and redesign
+   ========================================================= */
+
+.qip-auth-shell {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 12000 !important;
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(123,160,201,.65), transparent 38%),
+    linear-gradient(to bottom, #173d63 0%, #365f8b 45%, #294d72 100%) !important;
+}
+
+.qip-auth-window {
+  width: min(430px, calc(100vw - 28px));
+  overflow: hidden;
+  background: #ece9d8;
+  border: 1px solid #0a246a;
+  box-shadow:
+    0 0 0 1px #4d84b5,
+    0 0 0 2px #9fc6e5,
+    0 0 0 3px #174f87,
+    5px 5px 12px rgba(0,0,0,.45);
+}
+
+.qip-auth-titlebar {
+  min-height: 27px !important;
+}
+
+.qip-auth-content {
+  padding: 10px;
+  background: #f7f5ee;
+}
+
+.qip-auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+  padding: 8px 10px;
+  background: linear-gradient(to right, #ffffff, #eaf2fa);
+  border: 1px solid #aca899;
+}
+
+.qip-auth-brand img {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+
+.qip-auth-brand strong {
+  display: block;
+  color: #244f81;
+  font: bold 16px Tahoma, Arial, sans-serif;
+}
+
+.qip-auth-brand span {
+  display: block;
+  margin-top: 2px;
+  color: #777;
+  font: 9px Tahoma, Arial, sans-serif;
+}
+
+.qip-auth-form {
+  padding: 9px;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+}
+
+.qip-auth-field {
+  display: grid;
+  grid-template-columns: 96px minmax(0,1fr);
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  color: #222;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.qip-auth-field input {
+  width: 100%;
+  height: 24px;
+  min-width: 0;
+  padding: 3px 5px;
+  color: #111;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #808080;
+  font: 10px Tahoma, Arial, sans-serif;
+  outline: none;
+}
+
+.qip-auth-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 9px;
+}
+
+.qip-auth-submit {
+  min-width: 104px;
+  height: 27px;
+  font-weight: bold;
+}
+
+.qip-auth-statusbar {
+  min-height: 24px;
+  padding: 3px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #555;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  font: 9px Tahoma, Arial, sans-serif;
+}
+
+.qip-auth-shell .login-error {
+  min-height: 17px;
+  margin-top: 4px;
+  color: #a31515;
+  font: 9px/14px Tahoma, Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  .qip-auth-shell {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .qip-auth-window {
+    width: 100vw;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    border-left: 0;
+    border-right: 0;
+    box-shadow: none;
+  }
+
+  .qip-auth-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 14px;
+  }
+
+  .qip-auth-form {
+    padding: 12px;
+  }
+
+  .qip-auth-field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .qip-auth-field input {
+    height: 39px;
+    font-size: 15px;
+  }
+
+  .auth-mode-tabs {
+    height: 34px;
+  }
+
+  .auth-mode-tabs button {
+    flex: 1;
+    height: 33px;
+    font-size: 11px;
+  }
+
+  .qip-auth-submit {
+    width: 100%;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .registration-note {
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .qip-auth-statusbar {
+    padding-bottom: max(5px, env(safe-area-inset-bottom));
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v25 — registration reliability hotfix
+   ========================================================= */
+
+.qip-auth-submit:disabled,
+.auth-mode-tabs button:disabled {
+  color: #777 !important;
+  background: #d4d0c8 !important;
+  cursor: wait !important;
+}
+
+.qip-auth-shell .login-error:not(:empty) {
+  min-height: 25px;
+  padding: 5px 7px;
+  background: #fff4e5;
+  border: 1px solid #c98c56;
+  color: #9e1616;
+  font-weight: bold;
+}
+
+
+/* =========================================================
+   QIP UI Engine v26 — real auth form + registration warning
+   ========================================================= */
+
+.registration-warning {
+  margin-top: 7px;
+  padding: 7px 8px;
+  color: #5b4600;
+  background: #fff8c9;
+  border: 1px solid #c9aa49;
+  font: 9px/13px Tahoma, Arial, sans-serif;
+}
+
+.registration-warning strong {
+  color: #8b2e00;
+}
+
+.qip-auth-submit {
+  cursor: pointer;
+}
+
+.qip-auth-submit:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================================
+   QIP UI Engine v27 — definitive post-login overlay fix
+   ========================================================= */
+
+/*
+  v24-v26 forced display:flex !important on the auth overlay.
+  That overrode startApp() setting style.display='none', so authentication
+  succeeded but the login window stayed above the messenger.
+*/
+.qip-auth-shell[hidden],
+body.qip-authenticated .qip-auth-shell {
+  display: none !important;
+}
+
+body:not(.qip-authenticated) .qip-auth-shell:not([hidden]) {
+  display: flex !important;
+}
+
+body.qip-authenticated #mainWindow {
+  display: flex !important;
+}
+
+
+/* =========================================================
+   QIP UI Engine v28 — last visit and logout
+   ========================================================= */
+
+.qip-logout-glyph,
+.qip-popup-logout-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8d1e18;
+  font: bold 16px/16px Tahoma, Arial, sans-serif;
+}
+
+.qip-popup-logout-glyph {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+#chatPeerLastSeen {
+  color: #5f6f7e !important;
+}
+
+
+/* =========================================================
+   QIP UI Engine v29 — main header connection indicator
+   ========================================================= */
+
+.main-connection-meta {
+  margin-left: auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #4c6175;
+  font: 9px/14px Tahoma, Arial, sans-serif;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.main-connection-meta b {
+  color: #294f75;
+  font-weight: bold;
+}
+
+.main-connection-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #42b832;
+  border: 1px solid #1d6d18;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.65),
+    0 0 2px rgba(38,145,30,.65);
+}
+
+.main-connection-dot.offline {
+  background: #b9b9b9;
+  border-color: #6f6f6f;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.55);
+}
+
+.main-connection-state {
+  color: #28721f;
+  font-weight: bold;
+}
+
+.main-connection-dot.offline + .main-connection-state {
+  color: #777;
+}
+
+.main-connection-separator {
+  color: #9aa6b1;
+}
+
+@media (max-width: 700px) {
+  .main-connection-meta {
+    gap: 3px;
+    font-size: 8px;
+  }
+
+  .main-connection-dot {
+    width: 7px;
+    height: 7px;
+    flex-basis: 7px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v31 — contact context menu
+   ========================================================= */
+
+.contact {
+  touch-action: manipulation;
+}
+
+.contact-pref-markers {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  margin-left: 3px;
+  white-space: nowrap;
+}
+
+.contact-pref-marker {
+  color: #7c5b17;
+  font: 8px/10px Tahoma, Arial, sans-serif;
+}
+
+.contact-pref-marker.favorite {
+  color: #ba8500;
+}
+
+.contact-pref-marker.muted {
+  filter: grayscale(1);
+  opacity: .65;
+}
+
+.contact-context-menu {
+  position: fixed;
+  z-index: 15000;
+  display: none;
+  width: 238px;
+  padding: 2px;
+  color: #111;
+  background: #ece9d8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  box-shadow: 2px 2px 5px rgba(0,0,0,.45);
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.contact-context-menu.open {
+  display: block;
+}
+
+.contact-context-title {
+  min-height: 23px;
+  padding: 4px 7px;
+  overflow: hidden;
+  color: #ffffff;
+  background: linear-gradient(to right, #0a246a, #3a6ea5);
+  font: bold 10px/15px Tahoma, Arial, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-context-menu button {
+  width: 100%;
+  min-height: 25px;
+  padding: 3px 7px;
+  display: grid;
+  grid-template-columns: 19px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  color: #111;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font: 10px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.contact-context-menu button:hover,
+.contact-context-menu button:focus {
+  color: #ffffff;
+  background: #316ac5;
+  outline: none;
+}
+
+.contact-context-menu button > span:first-child {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.contact-context-menu button.danger {
+  color: #8f1717;
+}
+
+.contact-context-menu button.danger:hover,
+.contact-context-menu button.danger:focus {
+  color: #ffffff;
+}
+
+.contact-context-separator {
+  display: block;
+  height: 2px;
+  margin: 2px 3px;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+}
+
+@media (max-width: 700px) {
+  .contact-context-menu {
+    width: min(270px, calc(100vw - 12px));
+  }
+
+  .contact-context-menu button {
+    min-height: 33px;
+    font-size: 11px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v32 — real contact groups
+   ========================================================= */
+
+.qip-groups-toolbar-btn > span,
+.qip-popup-group-glyph,
+.qip-dialog-group-icon,
+.qip-group-folder {
+  color: #6e6b16;
+  font: bold 15px/16px "Courier New", monospace;
+}
+
+.qip-popup-group-glyph {
+  width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-group-wrap + .contact-group-wrap {
+  margin-top: 1px;
+}
+
+.group-header .label {
+  max-width: 68%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qip-group-manager-window {
+  width: min(520px, calc(100vw - 24px));
+}
+
+.qip-group-manager-content {
+  min-height: 0;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: #ece9d8;
+}
+
+.qip-group-manager-list {
+  min-height: 260px;
+  max-height: 430px;
+  overflow: auto;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.qip-group-manager-row {
+  min-height: 39px;
+  padding: 4px 5px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid #dedede;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.qip-group-manager-row:hover {
+  background: #edf4fd;
+}
+
+.qip-group-manager-info {
+  min-width: 0;
+}
+
+.qip-group-manager-info strong {
+  display: block;
+  overflow: hidden;
+  color: #1e497d;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qip-group-manager-info span {
+  color: #777;
+  font-size: 9px;
+}
+
+.qip-group-manager-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.qip-group-manager-actions button {
+  width: 23px;
+  height: 22px;
+  padding: 0;
+  color: #173a62;
+  background: linear-gradient(#ffffff, #dbe7f3);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  font: bold 10px Tahoma, Arial, sans-serif;
+}
+
+.qip-group-manager-actions button:disabled {
+  color: #aaa;
+  background: #dedbd1;
+  border-color: #aaa;
+}
+
+.qip-group-manager-create {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+}
+
+.qip-group-manager-create input {
+  min-width: 0;
+  height: 24px;
+  padding: 3px 5px;
+  background: #ffffff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #808080;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.qip-group-manager-note {
+  padding: 5px 7px;
+  color: #5f5f5f;
+  background: #fffde5;
+  border: 1px solid #c7bf79;
+  font: 9px/13px Tahoma, Arial, sans-serif;
+}
+
+.qip-group-picker-window {
+  width: min(360px, calc(100vw - 24px));
+}
+
+.qip-group-picker-contact {
+  padding: 7px 9px;
+  overflow: hidden;
+  color: #1e497d;
+  background: #f7f5ee;
+  border-bottom: 1px solid #aca899;
+  font: bold 10px Tahoma, Arial, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qip-group-picker-list {
+  max-height: 390px;
+  overflow: auto;
+  padding: 4px;
+  background: #ffffff;
+}
+
+.qip-group-picker-item {
+  width: 100%;
+  min-height: 31px;
+  padding: 3px 7px;
+  display: grid;
+  grid-template-columns: 15px 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px;
+  color: #111;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font: 10px Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+.qip-group-picker-item:hover,
+.qip-group-picker-item:focus {
+  color: #ffffff;
+  background: #316ac5;
+  outline: none;
+}
+
+.qip-group-picker-check {
+  color: #318a25;
+  font-size: 10px;
+}
+
+@media (max-width: 700px) {
+  .qip-group-manager-window {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .qip-group-manager-content {
+    flex: 1;
+  }
+
+  .qip-group-manager-list {
+    flex: 1;
+    max-height: none;
+  }
+
+  .qip-group-manager-actions button {
+    width: 26px;
+    height: 26px;
+  }
+
+  .qip-group-picker-window {
+    width: calc(100vw - 12px);
+  }
+
+  .qip-group-picker-item {
+    min-height: 39px;
+    font-size: 11px;
+  }
+}
+
+
+/* =========================================================
+   QIP UI Engine v33 — notification center
+   ========================================================= */
+
+.qip-notification-btn { position: relative; }
+
+.qip-notification-glyph,
+.qip-popup-notification-glyph,
+.qip-dialog-notification-icon {
+  color: #7d5b13;
+  font: bold 15px/16px Tahoma, Arial, sans-serif;
+}
+
+.qip-popup-notification-glyph {
+  width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qip-notification-indicator {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #aaa;
+  border: 1px solid #666;
+}
+
+.qip-notification-indicator.allowed {
+  background: #42b832;
+  border-color: #1d6d18;
+}
+
+.qip-notification-indicator.disabled {
+  background: #b33a32;
+  border-color: #6d1814;
+}
+
+.qip-notification-window {
+  width: min(520px, calc(100vw - 24px));
+}
+
+.qip-notification-content {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #ece9d8;
+}
+
+.qip-notification-permission {
+  min-height: 48px;
+  padding: 7px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  background: #fffde5;
+  border: 1px solid #c7bf79;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.qip-notification-permission strong,
+.qip-notification-permission span {
+  display: block;
+}
+
+.qip-notification-permission strong {
+  color: #244f81;
+  font-size: 10px;
+}
+
+.qip-notification-permission span {
+  margin-top: 2px;
+  color: #666;
+  font-size: 9px;
+}
+
+.qip-notification-option {
+  min-height: 45px;
+  padding: 6px 7px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 6px;
+  background: #f8f7f1;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #aca899;
+  border-bottom: 1px solid #aca899;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.qip-notification-option input { margin-top: 2px; }
+.qip-notification-option strong,
+.qip-notification-option small { display: block; }
+.qip-notification-option strong { color: #222; font-size: 10px; }
+.qip-notification-option small { margin-top: 2px; color: #777; font-size: 9px; line-height: 12px; }
+
+.qip-notification-test-row {
+  padding: 6px 7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  background: #e5e2d5;
+  border: 1px solid #aca899;
+  font: 9px Tahoma, Arial, sans-serif;
+}
+
+.xp-popup-host { gap: 5px; }
+.xp-message-popup { width: 290px; }
+
+.xp-popup-body {
+  display: grid !important;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.xp-popup-avatar {
+  width: 36px;
+  height: 36px;
+  padding: 1px;
+  overflow: hidden;
+  background: #fff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.xp-popup-avatar img {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: cover;
+}
+
+.xp-popup-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.xp-popup-copy strong,
+.xp-popup-copy > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .qip-notification-window { width: calc(100vw - 12px); }
+  .qip-notification-option { min-height: 52px; }
+  .qip-notification-option strong { font-size: 11px; }
+  .qip-notification-option small { font-size: 10px; line-height: 13px; }
+  .xp-message-popup { width: min(310px, calc(100vw - 12px)); }
+}
+
+
+/* =========================================================
+   QIP UI Engine v34 stage 1 — transfer manager and queue
+   ========================================================= */
+
+.transfer-toolbar-icon {
+  position: relative;
+  font: bold 15px/16px Tahoma, Arial, sans-serif;
+  color: #214f82;
+}
+
+.transfer-toolbar-icon > span {
+  display: block;
+  transform: translateY(-1px);
+}
+
+.transfer-toolbar-icon > b {
+  display: none;
+  position: absolute;
+  right: -4px;
+  top: -5px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 2px;
+  border: 1px solid #6e1414;
+  border-radius: 7px;
+  color: #fff;
+  background: #c43d34;
+  font: bold 8px/12px Tahoma, Arial, sans-serif;
+  text-align: center;
+}
+
+.transfer-toolbar-icon > b.show { display: block; }
+.transfer-toolbar-icon > b.error { background: #8f251f; }
+
+.file-dialog-icon {
+  min-width: 18px;
+  text-align: center;
+}
+
+.file-preview-window {
+  width: min(600px, calc(100vw - 24px));
+}
+
+.file-preview-recipient,
+.file-preview-summary {
+  padding: 7px 9px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.file-preview-summary {
+  border-top: 1px solid #fff;
+  border-bottom: 0;
+  color: #555;
+  text-align: right;
+}
+
+.file-preview-list {
+  max-height: 430px;
+  overflow: auto;
+  padding: 5px;
+  background: #fff;
+}
+
+.file-preview-row {
+  min-height: 52px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 25px;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid #ddd;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.file-preview-thumb {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #335b84;
+  background: #f1f3f5;
+  border-top: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  font: bold 8px Tahoma, Arial, sans-serif;
+}
+
+.file-preview-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.file-preview-info {
+  min-width: 0;
+}
+
+.file-preview-info strong,
+.file-preview-info span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-preview-info strong {
+  color: #1e497d;
+  font-size: 10px;
+}
+
+.file-preview-info span {
+  margin-top: 3px;
+  color: #777;
+  font-size: 9px;
+}
+
+.file-preview-remove,
+.transfer-actions button {
+  width: 23px;
+  height: 22px;
+  padding: 0;
+  color: #173a62;
+  background: linear-gradient(#fff, #dbe7f3);
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  border-radius: 0;
+  font: bold 10px Tahoma, Arial, sans-serif;
+}
+
+.transfer-manager-window {
+  width: min(700px, calc(100vw - 24px));
+}
+
+.transfer-manager-toolbar {
+  min-height: 35px;
+  padding: 5px 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.transfer-manager-list {
+  min-height: 300px;
+  max-height: 520px;
+  overflow: auto;
+  padding: 4px;
+  background: #fff;
+}
+
+.transfer-manager-empty {
+  min-height: 285px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.transfer-manager-empty > span {
+  color: #47729f;
+  font-size: 38px;
+}
+
+.transfer-manager-empty strong {
+  margin-top: 7px;
+  color: #365c83;
+  font-size: 11px;
+}
+
+.transfer-manager-empty small {
+  margin-top: 4px;
+  font-size: 9px;
+}
+
+.transfer-row {
+  min-height: 67px;
+  padding: 6px;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid #ddd;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.transfer-row.status-error { background: #fff0ee; }
+.transfer-row.status-completed { background: #f2fbef; }
+.transfer-row.status-cancelled { opacity: .72; }
+
+.transfer-status-icon {
+  width: 25px;
+  color: #295d8e;
+  font-size: 18px;
+  text-align: center;
+}
+
+.status-completed .transfer-status-icon { color: #25831d; }
+.status-error .transfer-status-icon { color: #b12b23; }
+.status-cancelled .transfer-status-icon { color: #777; }
+
+.transfer-main {
+  min-width: 0;
+}
+
+.transfer-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.transfer-heading strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #1e497d;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transfer-heading span {
+  flex: 0 0 auto;
+  color: #666;
+  font-size: 9px;
+}
+
+.transfer-progress {
+  height: 12px;
+  margin-top: 5px;
+  padding: 1px;
+  overflow: hidden;
+  background: #fff;
+  border-top: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.transfer-progress i {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    #2f8e27 0,
+    #2f8e27 5px,
+    #70bd64 5px,
+    #70bd64 8px
+  );
+  transition: width .12s linear;
+}
+
+.status-error .transfer-progress i { background: #c23a32; }
+.status-cancelled .transfer-progress i { background: #888; }
+
+.transfer-meta {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #777;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transfer-actions {
+  display: flex;
+  gap: 3px;
+}
+
+.chat-file-drop-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20050;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 52, 83, .48);
+  pointer-events: none;
+}
+
+.chat-file-drop-overlay.show {
+  display: flex;
+}
+
+.chat-file-drop-overlay > div {
+  width: min(430px, calc(100vw - 30px));
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #173f69;
+  background: #fffde5;
+  border: 3px dashed #4a78a5;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.28);
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.chat-file-drop-overlay span {
+  font-size: 38px;
+}
+
+.chat-file-drop-overlay strong {
+  margin-top: 9px;
+  font-size: 14px;
+}
+
+.chat-file-drop-overlay small {
+  margin-top: 5px;
+  color: #666;
+  font-size: 10px;
+}
+
+@media (max-width: 700px) {
+  .file-preview-window,
+  .transfer-manager-window {
+    width: calc(100vw - 12px);
+    max-height: calc(100dvh - 12px);
+  }
+
+  .transfer-manager-list {
+    min-height: 50dvh;
+    max-height: 68dvh;
+  }
+
+  .transfer-manager-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .file-preview-row {
+    grid-template-columns: 48px minmax(0, 1fr) 28px;
+    min-height: 59px;
+  }
+
+  .transfer-row {
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+
+  .transfer-actions {
+    grid-column: 2;
+    justify-content: flex-end;
+  }
+
+  .transfer-meta {
+    white-space: normal;
+    line-height: 12px;
+  }
+}
+
+
+/* QIP v34 Stage 2 — chunk upload states */
+.transfer-row.status-paused {
+  background: #fff9dc;
+}
+
+.transfer-row.status-preparing {
+  background: #eef5fc;
+}
+
+.status-paused .transfer-status-icon {
+  color: #9a7417;
+}
+
+.status-preparing .transfer-status-icon {
+  color: #3d6f9d;
+}
+
+.status-paused .transfer-progress i {
+  background: repeating-linear-gradient(
+    90deg,
+    #c09222 0,
+    #c09222 5px,
+    #e1bd60 5px,
+    #e1bd60 8px
+  );
+}
+
+.status-preparing .transfer-progress i {
+  background: repeating-linear-gradient(
+    90deg,
+    #447cad 0,
+    #447cad 5px,
+    #79a9d2 5px,
+    #79a9d2 8px
+  );
+}
+
+
+/* QIP v34 Stage 3 — file metadata, properties and media viewer */
+.file-properties-window {
+  width: min(560px, calc(100vw - 20px));
+}
+
+.file-properties-body {
+  padding: 8px;
+  background: #ece9d8;
+  font: 10px Tahoma, Arial, sans-serif;
+}
+
+.file-property-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 8px;
+  padding: 5px 3px;
+  border-bottom: 1px solid #c8c4b8;
+}
+
+.file-property-row span {
+  color: #555;
+}
+
+.file-property-row strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #153d66;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rich-file-card {
+  width: min(420px, 100%);
+  margin-top: 4px;
+  padding: 6px;
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 7px;
+  background: #f7f7f7;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #7f9db9;
+  border-bottom: 1px solid #7f9db9;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.rich-file-preview {
+  width: 80px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #e7edf4;
+  border: 1px solid #9aa9b7;
+  font-size: 30px;
+}
+
+.rich-file-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.rich-file-info {
+  min-width: 0;
+}
+
+.rich-file-info strong,
+.rich-file-info span,
+.rich-file-info small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rich-file-info strong {
+  color: #174a7c;
+  font-size: 11px;
+}
+
+.rich-file-info span {
+  margin-top: 3px;
+  color: #555;
+  font-size: 9px;
+}
+
+.rich-file-info small {
+  margin-top: 4px;
+  color: #278021;
+  font-size: 9px;
+}
+
+.rich-file-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.rich-file-actions button,
+.rich-file-actions a {
+  padding: 3px 8px;
+  color: #173e68;
+  background: linear-gradient(#fff, #dbe7f3);
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #315c87;
+  border-bottom: 1px solid #315c87;
+  text-decoration: none;
+  font: 9px Tahoma, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.media-viewer-window {
+  width: min(900px, calc(100vw - 18px));
+  height: min(700px, calc(100dvh - 18px));
+  display: flex;
+  flex-direction: column;
+}
+
+.media-viewer-toolbar {
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+}
+
+.media-viewer-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background:
+    linear-gradient(45deg, #d8d8d8 25%, transparent 25%),
+    linear-gradient(-45deg, #d8d8d8 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d8d8d8 75%),
+    linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+.media-viewer-content {
+  max-width: 95%;
+  max-height: 95%;
+  transform-origin: center center;
+  transition: transform .08s linear;
+}
+
+@media (max-width: 700px) {
+  .rich-file-card {
+    grid-template-columns: 66px minmax(0, 1fr);
+  }
+
+  .rich-file-preview {
+    width: 64px;
+    height: 56px;
+  }
+
+  .file-property-row {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+}
+
+
+/* QIP v35 — file experience */
+.rich-file-preview.clickable {
+  cursor: pointer;
+}
+
+.file-kind-icon {
+  line-height: 1;
+  font-size: 34px;
+  font-family: "Segoe UI Symbol", Tahoma, sans-serif;
+}
+
+.rich-file-preview.preview-error {
+  background: #eef2f5;
+}
+
+.media-audio-box {
+  width: min(480px, calc(100% - 24px));
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: #ece9d8;
+  border: 2px outset #fff;
+  font: 12px Tahoma, Arial, sans-serif;
+}
+
+.media-audio-box audio {
+  width: 100%;
+}
+
+.media-audio-icon {
+  color: #527283;
+  font-size: 72px;
+  line-height: 1;
+}
+
+.media-document-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.media-text-preview {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 14px;
+  overflow: auto;
+  color: #111;
+  background: #fff;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: 12px/1.45 Consolas, "Courier New", monospace;
+}
+
+.media-load-error {
+  max-width: 560px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff4f4;
+  border: 1px solid #b33;
+  color: #722;
+  font: 11px Tahoma, Arial, sans-serif;
+}
+
+.media-load-error span {
+  overflow-wrap: anywhere;
+}
+
+.media-load-error a {
+  color: #164f8b;
+}
+
+
+/* QIP v35.1 — spacing and contextual media controls */
+.msg + .msg {
+  margin-top: 8px;
+}
+
+.msg .rich-file-card {
+  margin-top: 7px;
+  margin-bottom: 5px;
+}
+
+.rich-file-preview > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-audio-cover {
+  width: min(220px, 70vw);
+  max-height: min(220px, 34vh);
+  object-fit: cover;
+  border: 1px solid #7f9db9;
+  box-shadow: 1px 1px 0 #fff;
+}
+
+/* QIP v35.4 — clean peer header: nickname, country, X-status on separate rows */
+.chat-info-bar {
+  min-height: 68px !important;
+  height: 68px !important;
+  padding: 3px 6px !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+.chat-info-bar .info-lines {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+.peer-name-line {
+  min-height: 15px !important;
+  line-height: 15px !important;
+}
+.peer-name-line .peer-name {
+  display: block !important;
+  width: 100% !important;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  color: #1e4772 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.peer-presence-line {
+  min-height: 16px !important;
+  line-height: 16px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.peer-country-online {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  color: #555 !important;
+  font-size: 11px !important;
+  line-height: 16px !important;
+}
+.peer-country-flag {
+  flex: 0 0 auto !important;
+  font-size: 15px !important;
+  line-height: 16px !important;
+}
+.peer-country-name {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.peer-xstatus-line {
+  min-height: 17px !important;
+  line-height: 17px !important;
+}
+.peer-xstatus-marquee {
+  flex: 1 1 auto !important;
+  width: 0 !important;
+  max-width: none !important;
+}
+.chat-info-bar .info-lines-right {
+  align-self: center !important;
+  flex: 0 0 auto !important;
+}
+@media (max-width: 700px) {
+  .chat-info-bar {
+    min-height: 68px !important;
+    height: 68px !important;
+  }
+  .chat-info-bar .info-lines-right {
+    max-width: 145px !important;
+  }
+}
+
+.peer-name-status-line{display:flex;align-items:center;gap:8px}
+.peer-name{flex-shrink:0;font-weight:bold}
+.peer-xstatus-inline{flex:1;min-width:0;display:flex;align-items:center;gap:4px}
+.peer-presence-line{margin-top:2px}
